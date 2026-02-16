@@ -10,19 +10,19 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 const INITIAL_QUESTIONS = [
-  { id: 'q1', text: "כוחו של פרומפט", link: "https://gemini.google.com/share/bbce1f8f445c" },
+  { id: 'q1', text: "כוחו של פרומפט", link: "https://gemini.google.com/share/bbce1f8f445c", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/dabefa540_image.png" },
   { id: 'q2', text: "למה המודל תמיד מניח שהרופא הוא גבר?" },
-  { id: 'q3', text: "זיהוי הטיות בבינה מלאכותית", link: "https://gemini.google.com/share/59d718dde511" },
+  { id: 'q3', text: "זיהוי הטיות בבינה מלאכותית", link: "https://gemini.google.com/share/59d718dde511", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/a7412bf54_image.png" },
   { id: 'q4', text: "האם תלמיד שכותב עם AI הוא עדיין הכותב של היצירה?" },
-  { id: 'q5', text: "איך המחשב יודע מה המילה הבאה?", link: "https://gemini.google.com/share/52175e0e7da1" },
-  { id: 'q6', text: "מה ה-T ב-GPT? חקירת ארכיטקטורת Transformer", link: "https://transformer-anatomy-explorer-ea037c21.base44.app/" },
+  { id: 'q5', text: "איך המחשב יודע מה המילה הבאה?", link: "https://gemini.google.com/share/52175e0e7da1", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/8dba57ba4_image.png" },
+  { id: 'q6', text: "מה ה-T ב-GPT? חקירת ארכיטקטורת Transformer", link: "https://transformer-anatomy-explorer-ea037c21.base44.app/", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/4ac6b2f79_image.png" },
   { id: 'q7', text: "איך אני יכול להוכיח לתלמידים שה-AI הרגע המציא עובדה?" },
   { id: 'q8', text: "מה קורה בתוך ה'קופסה השחורה' כשיש שגיאה?" },
   { id: 'q9', text: "האם ה-AI מכיר היסטוריה שלא נכתבה על ידי המנצחים?" },
   { id: 'q10', text: "איך נראית 'הסתברות' כשמסתכלים עליה מקרוב?" },
   { id: 'q11', text: "האם אפשר ללמד AI להרגיש אמפתיה דרך מילים?" },
   { id: 'q12', text: "למה ה-AI עונה אחרת אם אני רק משנה מילה אחת?" },
-  { id: 'q13', text: "איך מייצרים 'חיסון' נגד פייק ניוז שנוצר בבינה מלאכותית?", link: "https://truthseekerlab.com" },
+  { id: 'q13', text: "איך מייצרים 'חיסון' נגד פייק ניוז שנוצר בבינה מלאכותית?", link: "https://truthseekerlab.com", image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/fe81fd2ad_image.png" },
   { id: 'q14', text: "למה המודל נוטה להסכים איתי גם כשאני טועה?" },
   { id: 'q15', text: "האם ל-AI יש 'סגנון אישי' או שהוא רק חיקוי של הממוצע?" },
   { id: 'q16', text: "האם המחשב באמת מבין מה הוא אומר?" },
@@ -170,9 +170,11 @@ export default function Index() {
             <AnimatePresence mode="wait">
               {cardPage === 0 && (
                 <motion.div key="page0" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.3 }} className="space-y-3">
-                  <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-1 bg-orange-500 rounded-full flex items-center justify-center">
-                    <Brain className="w-10 h-10 md:w-12 md:h-12 text-white" />
-                  </div>
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/00627d883_image.png" 
+                    alt="Unboxing School" 
+                    className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-1 object-contain"
+                  />
                   <h1 className="text-base md:text-lg font-black text-gray-900 tracking-tight leading-tight">
                     קהילת <span className="text-orange-500">Unboxing School</span>
                   </h1>
@@ -444,9 +446,13 @@ export default function Index() {
       <section className="relative z-30 bg-white py-10 px-6" dir="rtl">
         <div className="max-w-2xl mx-auto">
           <div className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-teal-400 to-blue-500 h-48 flex items-center justify-center">
-              <span className="text-6xl font-black text-white">AI QUESTS</span>
-            </div>
+            <a href="https://research.google/ai-quests/intl/he_il/teacher-resources" target="_blank" rel="noopener noreferrer" className="block group">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/916b9d9bd_image.png" 
+                alt="AI Quests" 
+                className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </a>
             <div className="p-6 space-y-4 text-right">
               <div>
                 <h3 className="text-lg font-black text-gray-900 mb-1">AI Quests – Google Research × Stanford</h3>
