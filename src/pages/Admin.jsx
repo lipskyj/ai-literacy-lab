@@ -12,7 +12,11 @@ export default function Admin() {
   const [participants, setParticipants] = useState([]);
   const [topicClicks, setTopicClicks] = useState([]);
   const [communityTools, setCommunityTools] = useState([]);
+  const [bubbles, setBubbles] = useState([]);
+  const [settings, setSettings] = useState(null);
   const [activeTab, setActiveTab] = useState('participants');
+  const [editingBubble, setEditingBubble] = useState(null);
+  const [showBubbleForm, setShowBubbleForm] = useState(false);
 
   const fetchData = async () => {
     const p = await base44.entities.Participant.list('-created_date', 500);
@@ -21,6 +25,10 @@ export default function Admin() {
     if (c) setTopicClicks(c);
     const t = await base44.entities.CommunityTool.list('-created_date', 100);
     if (t) setCommunityTools(t);
+    const b = await base44.entities.Bubble.list('order', 100);
+    if (b) setBubbles(b);
+    const s = await base44.entities.BubbleSettings.list('-created_date', 1);
+    if (s && s.length > 0) setSettings(s[0]);
   };
 
   useEffect(() => {
@@ -30,6 +38,38 @@ export default function Admin() {
 
   const updateToolStatus = async (id, status) => {
     await base44.entities.CommunityTool.update(id, { status });
+    fetchData();
+  };
+
+  const saveBubble = async (data) => {
+    if (editingBubble) {
+      await base44.entities.Bubble.update(editingBubble.id, data);
+    } else {
+      await base44.entities.Bubble.create(data);
+    }
+    setEditingBubble(null);
+    setShowBubbleForm(false);
+    fetchData();
+  };
+
+  const deleteBubble = async (id) => {
+    if (confirm('האם למחוק בועה זו?')) {
+      await base44.entities.Bubble.delete(id);
+      fetchData();
+    }
+  };
+
+  const toggleBubbleActive = async (id, isActive) => {
+    await base44.entities.Bubble.update(id, { is_active: !isActive });
+    fetchData();
+  };
+
+  const saveSettings = async (data) => {
+    if (settings) {
+      await base44.entities.BubbleSettings.update(settings.id, data);
+    } else {
+      await base44.entities.BubbleSettings.create(data);
+    }
     fetchData();
   };
 
@@ -96,7 +136,7 @@ export default function Admin() {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <button onClick={() => setActiveTab('participants')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'participants' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
             נרשמים
           </button>
@@ -110,6 +150,12 @@ export default function Admin() {
                 {pendingTools.length}
               </span>
             )}
+          </button>
+          <button onClick={() => setActiveTab('bubbles')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'bubbles' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
+            בועות
+          </button>
+          <button onClick={() => setActiveTab('settings')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'settings' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
+            הגדרות
           </button>
         </div>
 
@@ -214,6 +260,161 @@ export default function Admin() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {activeTab === 'bubbles' && (
+          <div className="space-y-4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-black text-gray-900">ניהול בועות</h2>
+              <button
+                onClick={() => { setEditingBubble(null); setShowBubbleForm(true); }}
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600"
+              >
+                + הוספת בועה
+              </button>
+            </div>
+
+            {showBubbleForm && (
+              <div className="bg-white border border-gray-200 rounded-xl p-5">
+                <h3 className="text-sm font-black text-gray-900 mb-4">{editingBubble ? 'עריכת בועה' : 'בועה חדשה'}</h3>
+                <form onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const imageFile = formData.get('image');
+                  let imageUrl = editingBubble?.image_url || '';
+                  
+                  if (imageFile && imageFile.size > 0) {
+                    const result = await base44.integrations.Core.UploadFile({ file: imageFile });
+                    imageUrl = result.file_url;
+                  }
+
+                  await saveBubble({
+                    text: formData.get('text'),
+                    link: formData.get('link') || null,
+                    image_url: imageUrl || null,
+                    is_active: formData.get('is_active') === 'on',
+                    order: parseInt(formData.get('order')) || 0,
+                  });
+                }} className="space-y-3">
+                  <div>
+                    <label className="text-xs font-bold text-gray-600 block mb-1">טקסט הבועה</label>
+                    <input name="text" required defaultValue={editingBubble?.text} className="w-full p-2 text-sm rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-bold text-gray-600 block mb-1">קישור (אופציונלי)</label>
+                      <input name="link" type="url" defaultValue={editingBubble?.link} className="w-full p-2 text-sm rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-bold text-gray-600 block mb-1">סדר</label>
+                      <input name="order" type="number" defaultValue={editingBubble?.order || 0} className="w-full p-2 text-sm rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-600 block mb-1">תמונה (אופציונלי)</label>
+                    <input name="image" type="file" accept="image/*" className="w-full p-2 text-sm rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                    {editingBubble?.image_url && (
+                      <img src={editingBubble.image_url} className="mt-2 h-20 object-cover rounded" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input name="is_active" type="checkbox" defaultChecked={editingBubble?.is_active !== false} className="w-4 h-4" />
+                    <label className="text-xs font-bold text-gray-600">פעיל</label>
+                  </div>
+                  <div className="flex gap-2">
+                    <button type="submit" className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600">שמירה</button>
+                    <button type="button" onClick={() => { setShowBubbleForm(false); setEditingBubble(null); }} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-300">ביטול</button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {bubbles.map(bubble => (
+                <div key={bubble.id} className={`bg-white border rounded-xl p-4 ${bubble.is_active ? 'border-gray-200' : 'border-gray-300 opacity-50'}`}>
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-gray-900">{bubble.text}</p>
+                      {bubble.link && (
+                        <a href={bubble.link} target="_blank" rel="noopener noreferrer" className="text-xs text-orange-500 hover:underline mt-1 block">
+                          {bubble.link.substring(0, 40)}...
+                        </a>
+                      )}
+                      {bubble.image_url && (
+                        <img src={bubble.image_url} className="mt-2 h-16 object-cover rounded" />
+                      )}
+                      <p className="text-xs text-gray-500 mt-2">סדר: {bubble.order} | {bubble.is_active ? 'פעיל' : 'לא פעיל'}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      <button onClick={() => { setEditingBubble(bubble); setShowBubbleForm(true); }} className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                      </button>
+                      <button onClick={() => toggleBubbleActive(bubble.id, bubble.is_active)} className="p-2 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200">
+                        {bubble.is_active ? '👁️' : '🚫'}
+                      </button>
+                      <button onClick={() => deleteBubble(bubble.id)} className="p-2 bg-red-100 text-red-600 rounded hover:bg-red-200">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'settings' && (
+          <div className="bg-white border border-gray-200 rounded-xl p-6">
+            <h2 className="text-lg font-black text-gray-900 mb-4">הגדרות תצוגה</h2>
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target);
+              saveSettings({
+                mobile_slot_count: parseInt(formData.get('mobile_slot_count')),
+                desktop_slot_count: parseInt(formData.get('desktop_slot_count')),
+                cycle_duration: parseInt(formData.get('cycle_duration')),
+                link_bubble_color: formData.get('link_bubble_color'),
+                regular_bubble_color: formData.get('regular_bubble_color'),
+              });
+            }} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">מספר בועות במובייל</label>
+                  <input name="mobile_slot_count" type="number" min="1" max="20" defaultValue={settings?.mobile_slot_count || 10} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">מספר בועות במחשב</label>
+                  <input name="desktop_slot_count" type="number" min="1" max="30" defaultValue={settings?.desktop_slot_count || 13} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">זמן החלפה (ms)</label>
+                  <input name="cycle_duration" type="number" min="1000" max="10000" step="100" defaultValue={settings?.cycle_duration || 4000} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">צבע בועות עם קישור</label>
+                  <select name="link_bubble_color" defaultValue={settings?.link_bubble_color || 'orange'} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none">
+                    <option value="orange">כתום</option>
+                    <option value="blue">כחול</option>
+                    <option value="green">ירוק</option>
+                    <option value="purple">סגול</option>
+                    <option value="red">אדום</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">צבע בועות רגילות</label>
+                  <select name="regular_bubble_color" defaultValue={settings?.regular_bubble_color || 'white'} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none">
+                    <option value="white">לבן</option>
+                    <option value="gray">אפור</option>
+                    <option value="blue">כחול</option>
+                    <option value="green">ירוק</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" className="px-6 py-3 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600">
+                שמירת הגדרות
+              </button>
+            </form>
           </div>
         )}
       </div>

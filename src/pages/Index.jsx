@@ -69,25 +69,37 @@ export default function Index() {
   const [modalTab, setModalTab] = useState('topics');
   const [topicPage, setTopicPage] = useState(0);
   const [resourcePage, setResourcePage] = useState(0);
+  const [dbBubbles, setDbBubbles] = useState([]);
 
   useEffect(() => {
-    const fetchApproved = async () => {
-      const data = await base44.entities.CommunityTool.filter({ status: 'approved' }, '-created_date', 100);
-      if (data) {
-        const tools = data.map(t => ({
+    const fetchData = async () => {
+      const tools = await base44.entities.CommunityTool.filter({ status: 'approved' }, '-created_date', 100);
+      if (tools) {
+        const toolBubbles = tools.map(t => ({
           id: `community-${t.id}`,
           text: t.tool_name,
           link: t.link,
           image: t.image_url,
           communityMeta: { fullName: t.full_name, school: t.school, goal: t.goal },
         }));
-        setCommunityTools(tools);
+        setCommunityTools(toolBubbles);
+      }
+
+      const bubbles = await base44.entities.Bubble.filter({ is_active: true }, 'order', 100);
+      if (bubbles && bubbles.length > 0) {
+        const bubbleItems = bubbles.map(b => ({
+          id: b.id,
+          text: b.text,
+          link: b.link || undefined,
+          image: b.image_url || undefined,
+        }));
+        setDbBubbles(bubbleItems);
       }
     };
-    fetchApproved();
+    fetchData();
   }, []);
 
-  const allQuestions = [...communityTools, ...questions];
+  const allQuestions = dbBubbles.length > 0 ? [...communityTools, ...dbBubbles] : [...communityTools, ...questions];
 
   const handleSelect = async (question) => {
     const sessionId = sessionStorage.getItem('session_id') || (() => {
