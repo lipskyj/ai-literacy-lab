@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MOBILE_SLOTS = [
@@ -13,13 +13,29 @@ const DESKTOP_SLOTS = [
   { x: 2, y: 72 }, { x: 18, y: 80 }, { x: 42, y: 78 }, { x: 68, y: 75 }, { x: 82, y: 82 },
 ];
 
-const BubbleField = ({ items, onSelect }) => {
+const COLOR_MAP = {
+  orange: 'bg-gradient-to-br from-orange-400 to-orange-600 text-white border-2 border-orange-300',
+  blue: 'bg-gradient-to-br from-blue-400 to-blue-600 text-white border-2 border-blue-300',
+  green: 'bg-gradient-to-br from-green-400 to-green-600 text-white border-2 border-green-300',
+  purple: 'bg-gradient-to-br from-purple-400 to-purple-600 text-white border-2 border-purple-300',
+  red: 'bg-gradient-to-br from-red-400 to-red-600 text-white border-2 border-red-300',
+  white: 'bg-white text-gray-800 border-2 border-gray-200',
+  gray: 'bg-gray-100 text-gray-800 border-2 border-gray-300',
+};
+
+const BubbleField = ({ items, onSelect, settings }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const slots = isMobile ? MOBILE_SLOTS : DESKTOP_SLOTS;
+  
+  const mobileSlotCount = settings?.mobile_slot_count || 10;
+  const desktopSlotCount = settings?.desktop_slot_count || 13;
+  const cycleDuration = settings?.cycle_duration || 4000;
+  const linkColor = settings?.link_bubble_color || 'orange';
+  const regularColor = settings?.regular_bubble_color || 'white';
+
+  const slots = isMobile ? MOBILE_SLOTS.slice(0, mobileSlotCount) : DESKTOP_SLOTS.slice(0, desktopSlotCount);
   const activeSlotCount = Math.min(slots.length, items.length);
 
   const [slotStates, setSlotStates] = useState([]);
-  const [keyCounter, setKeyCounter] = useState(0);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -34,22 +50,21 @@ const BubbleField = ({ items, onSelect }) => {
   }, [items]);
 
   useEffect(() => {
+    if (items.length === 0) return;
     const initial = [];
     const used = new Set();
     for (let i = 0; i < activeSlotCount; i++) {
       const item = getRandomItem(used);
       used.add(item.id);
-      initial.push({ item, key: i });
+      initial.push({ item, key: Date.now() + i });
     }
     setSlotStates(initial);
-    setKeyCounter(activeSlotCount);
-  }, [activeSlotCount, items.length]);
+  }, [activeSlotCount, items.length, getRandomItem]);
 
   useEffect(() => {
-    if (slotStates.length === 0) return;
+    if (slotStates.length === 0 || items.length === 0) return;
     
     const timers = [];
-    const cycleDuration = 4000;
     const staggerDelay = cycleDuration / activeSlotCount;
     const intervals = [];
     
@@ -84,13 +99,15 @@ const BubbleField = ({ items, onSelect }) => {
       timers.forEach(t => clearTimeout(t));
       intervals.forEach(i => clearInterval(i));
     };
-  }, [slotStates.length, getRandomItem, activeSlotCount]);
+  }, [slotStates.length, getRandomItem, activeSlotCount, cycleDuration, items.length]);
 
   return (
     <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
-      {slots.slice(0, activeSlotCount).map((slot, slotIndex) => {
+      {slots.map((slot, slotIndex) => {
         const state = slotStates[slotIndex];
         if (!state) return null;
+
+        const bubbleColor = state.item.link ? COLOR_MAP[linkColor] : COLOR_MAP[regularColor];
 
         return (
           <div
@@ -110,11 +127,7 @@ const BubbleField = ({ items, onSelect }) => {
                 exit={{ opacity: 0, scale: 0.7, y: -10 }}
                 transition={{ duration: 1, ease: 'easeInOut' }}
                 onClick={() => onSelect(state.item)}
-                className={`px-4 py-3 rounded-2xl font-bold text-sm shadow-lg transition-all hover:scale-105 ${
-                  state.item.link 
-                    ? 'bg-gradient-to-br from-orange-400 to-orange-600 text-white border-2 border-orange-300' 
-                    : 'bg-white text-gray-800 border-2 border-gray-200'
-                }`}
+                className={`px-4 py-3 rounded-2xl font-bold text-sm shadow-lg transition-all hover:scale-105 ${bubbleColor}`}
               >
                 <span dir="rtl" className="text-xs md:text-sm font-bold leading-snug">
                   {state.item.text}

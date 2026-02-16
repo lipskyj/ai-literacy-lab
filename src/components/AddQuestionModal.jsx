@@ -6,14 +6,16 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
   const [topicText, setTopicText] = useState('');
   const [fullName, setFullName] = useState('');
   const [school, setSchool] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!topicText.trim() || !fullName.trim() || !school.trim()) return;
-    onSubmit(topicText, fullName, school);
+    if (!topicText.trim() || !fullName.trim() || !school.trim() || !email.trim()) return;
+    onSubmit(topicText, fullName, school, email);
     setTopicText('');
     setFullName('');
     setSchool('');
+    setEmail('');
   };
 
   return (
@@ -46,15 +48,27 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בית ספר / קהילה</label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">מייל</label>
                   <input
                     required
-                    value={school}
-                    onChange={(e) => setSchool(e.target.value)}
-                    placeholder="איפה אתם מלמדים?"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="your@email.com"
                     className="w-full p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
+                    dir="ltr"
                   />
                 </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בית ספר / קהילה</label>
+                <input
+                  required
+                  value={school}
+                  onChange={(e) => setSchool(e.target.value)}
+                  placeholder="איפה אתם מלמדים?"
+                  className="w-full p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">הנושא שלכם</label>
@@ -69,7 +83,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
               </div>
               <div className="flex gap-4 pt-2">
                 <button type="submit" className="flex-1 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700">
-                  הוספה לזרם 🚀
+                  שליחה 🚀
                 </button>
                 <button
                   type="button"

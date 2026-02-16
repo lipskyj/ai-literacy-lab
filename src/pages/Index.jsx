@@ -70,6 +70,7 @@ export default function Index() {
   const [topicPage, setTopicPage] = useState(0);
   const [resourcePage, setResourcePage] = useState(0);
   const [dbBubbles, setDbBubbles] = useState([]);
+  const [bubbleSettings, setBubbleSettings] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,6 +95,11 @@ export default function Index() {
           image: b.image_url || undefined,
         }));
         setDbBubbles(bubbleItems);
+      }
+
+      const settings = await base44.entities.BubbleSettings.list('-created_date', 1);
+      if (settings && settings.length > 0) {
+        setBubbleSettings(settings[0]);
       }
     };
     fetchData();

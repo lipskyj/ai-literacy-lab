@@ -166,6 +166,7 @@ export default function Admin() {
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="p-3 text-right font-bold text-gray-600">שם</th>
+                    <th className="p-3 text-right font-bold text-gray-600">מייל</th>
                     <th className="p-3 text-right font-bold text-gray-600">בית ספר</th>
                     <th className="p-3 text-right font-bold text-gray-600">נושא</th>
                     <th className="p-3 text-right font-bold text-gray-600">רעיון</th>
@@ -176,6 +177,7 @@ export default function Admin() {
                   {participants.map(p => (
                     <tr key={p.id} className="border-t border-gray-200">
                       <td className="p-3 text-gray-900">{p.full_name}</td>
+                      <td className="p-3 text-gray-900 text-xs">{p.email}</td>
                       <td className="p-3 text-gray-900">{p.school}</td>
                       <td className="p-3 text-gray-900 text-xs">{p.topic_text}</td>
                       <td className="p-3 text-gray-900 text-xs max-w-[200px] truncate">{p.idea}</td>
@@ -183,7 +185,7 @@ export default function Admin() {
                     </tr>
                   ))}
                   {participants.length === 0 && (
-                    <tr><td colSpan={5} className="p-6 text-center text-gray-600">אין נרשמים עדיין</td></tr>
+                    <tr><td colSpan={6} className="p-6 text-center text-gray-600">אין נרשמים עדיין</td></tr>
                   )}
                 </tbody>
               </table>
