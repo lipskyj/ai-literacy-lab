@@ -130,11 +130,12 @@ export default function Index() {
     setShowQuestionModal(true);
   };
 
-  const handleAddSubmit = async (topicText, fullName, school) => {
+  const handleAddSubmit = async (topicText, fullName, school, email) => {
     await base44.entities.Participant.create({
       topic_id: `custom-${Date.now()}`,
       topic_text: topicText,
       full_name: fullName,
+      email: email,
       school: school,
       idea: topicText,
     });
@@ -307,6 +308,7 @@ export default function Index() {
                 e.preventDefault();
                 const form = e.target;
                 const fullName = form.elements.namedItem('fullName').value;
+                const email = form.elements.namedItem('email').value;
                 const school = form.elements.namedItem('school').value;
                 const idea = form.elements.namedItem('idea').value;
                 
@@ -314,6 +316,7 @@ export default function Index() {
                   topic_id: selectedQuestion.id,
                   topic_text: selectedQuestion.text,
                   full_name: fullName,
+                  email: email,
                   school: school,
                   idea: idea,
                 });
@@ -326,10 +329,14 @@ export default function Index() {
                     <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">שם מלא</label>
                     <input name="fullName" required type="text" placeholder="השם שלך..." className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
                   </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">בית ספר / קהילה</label>
-                    <input name="school" required type="text" placeholder="איפה אתם מלמדים?" className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                  <div className="space-y-2">
+                    <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">מייל</label>
+                    <input name="email" required type="email" placeholder="your@email.com" className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" dir="ltr" />
                   </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">בית ספר / קהילה</label>
+                  <input name="school" required type="text" placeholder="איפה אתם מלמדים?" className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
                 </div>
 
                 <div className="space-y-2">
