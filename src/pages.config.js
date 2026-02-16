@@ -47,8 +47,16 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import Index from './pages/Index';
+import Admin from './pages/Admin';
 
-export const pagesConfig = {
-	Pages: {}
+
+export const PAGES = {
+    "Index": Index,
+    "Admin": Admin,
 }
 
+export const pagesConfig = {
+    mainPage: "Index",
+    Pages: PAGES,
+};
