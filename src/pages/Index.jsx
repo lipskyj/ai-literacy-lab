@@ -33,6 +33,28 @@ const INITIAL_QUESTIONS = [
   { id: 'q21', text: "האם ה-AI מכיר את הסיפורים של הקהילה שלנו, או רק את ויקיפדיה?" },
 ];
 
+const EXPERIMENT_IDEAS = [
+  { icon: Swords, title: 'זירת הפרומפטים', desc: 'תחרות פרומפטים – שני שחקנים כותבים פרומפט לאותו אתגר, הכיתה מצביעה על התוצאה הטובה יותר' },
+  { icon: Brain, title: 'גלאי ההטיות', desc: 'שנו מילה אחת בשאלה (מגדר, תרבות, גיל) וגלו איך ה-AI משנה את התשובה – חקירת הטיות בזמן אמת' },
+  { icon: Gauge, title: 'מד הביטחון', desc: 'שאלו את ה-AI שאלות עובדתיות, דרגו כמה אתם בוטחים בתשובה, ואז בדקו – מי זיהה הזיה?' },
+  { icon: Languages, title: 'טלפון שבור AI', desc: 'שרשרת תרגום וסיכום – צפו איך המשמעות נסחפת כשה-AI מעביר מסר ממודל למודל' },
+];
+
+const RESOURCES = [
+  { title: 'Transformer Explainer', subtitle: 'Inside the Transformer Brain', desc: 'הכלי המקיף ביותר ל"קופסה שקופה" של LLMs – מריץ GPT-2 בדפדפן. הקלידו משפט וצפו איך הוא מפורק לטוקנים, עובר Self-Attention ומנבא את המילה הבאה.', link: 'https://poloclub.github.io/transformer-explainer/' },
+  { title: 'LLM Visualization', subtitle: 'The 3D LLM Walkthrough', desc: 'ויזואליזציה תלת-ממדית מרהיבה שמלווה כל חישוב שהמודל עושה – הופכת את ה"קופסה השחורה" למכונה מוחשית.', link: 'https://bbycroft.net/llm' },
+  { title: 'Tiktokenizer', subtitle: 'The Tokenizer Lab', desc: 'מודלי שפה לא רואים מילים – הם רואים טוקנים. הדביקו טקסט וראו איך מודלים שונים "חותכים" את השפה.', link: 'https://tiktokenizer.vercel.app/' },
+  { title: 'AnimatedLLM', subtitle: 'The Step-by-Step Decoder', desc: 'כלי בדפדפן שנועד ללא-מומחים – מראה תצוגה נקייה של תהליך הדקודינג, איך המודל צורך את הפלט שלו כדי לבנות משפט קוהרנטי.', link: 'https://animatedllm.github.io/' },
+  { title: 'Semantris: Blocks', subtitle: 'Word Vector Tetris', desc: 'משחק בסגנול טטריס – כתבו רמזים כדי לחסל בלוקים. ה-AI משתמש ב-Word Embeddings כדי לקשר בין המילים שלכם לבלוקים.', link: 'https://research.google.com/semantris/' },
+  { title: 'Survival of the Best Fit', subtitle: 'The Hiring Algorithm Sim', desc: 'משחק על כלי גיוס AI שהופך מוטה. הדרך הטובה ביותר להסביר למה Training Data חשוב יותר מהקוד עצמו.', link: 'https://www.survivalofthebestfit.com/game/' },
+  { title: 'TensorFlow Playground', subtitle: 'Neural Network Sandbox', desc: 'ארגז חול לרשת נוירונים – הוסיפו שכבות, שנו Learning Rate וצפו איך ה-AI לומד לסווג נקודות. הכלי האולטימטיבי לחקור מבפנים.', link: 'https://playground.tensorflow.org/' },
+  { title: 'AI for Oceans', subtitle: 'The Data Cleaner', desc: 'חוויה אינטראקטיבית של Code.org – אמנו בוט AI להבחין בין דגים לזבל. הדרך הטובה ביותר להסביר שAI הוא רק שיקוף של התיוגים שלנו.', link: 'https://code.org/oceans' },
+  { title: 'Quick, Draw!', subtitle: 'Neural Network Pictionary', desc: 'ציירו ורשת נוירונים מנסה לנחש בזמן אמת – הצצה למודלים המנטליים המשותפים שה-AI למד ממיליוני אנשים.', link: 'https://quickdraw.withgoogle.com/' },
+  { title: 'AI Puzzlers', subtitle: 'Humans vs. Pattern Matchers', desc: 'משחק שמשתמש בפאזלים ויזואליים (ARC) שקלים לילדים אך קשים ל-AI. תלמידים פותרים את הפאזל, ואז צופים ב-AI מסביר בביטחון פתרון שגוי – ההוכחה ש-AI "מנבא" ולא "חושב".', link: 'https://ai-puzzlers.com/' },
+  { title: 'Datasets Have Worldviews', subtitle: 'The Parameter Shifter', desc: 'אינטראקטיב שבו משנים את הגדרות הקטגוריות בדאטאסט ורואים בזמן אמת איך זה משנה את הסיווג של אלפי פריטים – ההוכחה שדאטה הוא לא "אובייקטיבי" אלא דעה.', link: 'https://pair.withgoogle.com/explorables/dataset-worldviews/' },
+  { title: 'The Most Likely Machine', subtitle: 'The Algorithmic Fairness Lab', desc: 'חקירה אינטראקטיבית של אלגוריתם שמחליט מי מקבל הלוואה או עבודה. "שחקו" עם הדאטה וגלו שהסרת תוויות כמו מגדר לא תמיד מתקנת את ההטיה – חשיפת משתני פרוקסי.', link: 'https://mostlikelymachine.artefactgroup.com/' },
+];
+
 export default function Index() {
   const [questions, setQuestions] = useState(INITIAL_QUESTIONS);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -45,6 +67,8 @@ export default function Index() {
   const [communityTools, setCommunityTools] = useState([]);
   const [cardPage, setCardPage] = useState(0);
   const [modalTab, setModalTab] = useState('topics');
+  const [topicPage, setTopicPage] = useState(0);
+  const [resourcePage, setResourcePage] = useState(0);
 
   useEffect(() => {
     const fetchApproved = async () => {
@@ -361,6 +385,83 @@ export default function Index() {
         )}
       </AnimatePresence>
 
+      {/* MindCET Products Section */}
+      <section className="relative z-30 bg-gray-100 py-12 px-6" dir="rtl">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-xl font-black text-gray-900 text-center mb-2">כלים של MindCET לאוריינות בינה מלאכותית</h2>
+          <p className="text-xs text-gray-600 text-center mb-8">משחקים וחוויות אינטראקטיביות לפיתוח חשיבה ביקורתית ויצירתיות</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {/* FROST */}
+            <a href="https://plai.mindcet.org/frost_index" target="_blank" rel="noopener noreferrer" className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
+              <div className="bg-[#dff6f9] p-6 flex items-center justify-center h-32">
+                <span className="text-4xl font-black text-[#4a90a4]">FROST</span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h3 className="text-base font-black text-gray-900">FROST</h3>
+                <p className="text-[11px] text-gray-600 leading-relaxed">
+                  חדר בריחה דיגיטלי לפיתוח אוריינות בינה מלאכותית. התלמידים יתמודדו עם 4 משימות שיאתגרו אותם לחשוב בצורה ביקורתית.
+                </p>
+                <span className="inline-flex items-center gap-1 text-[10px] text-orange-500 font-bold group-hover:underline">
+                  <ExternalLink className="w-3 h-3" /> כניסה לחדר הבריחה
+                </span>
+              </div>
+            </a>
+            {/* PLAI */}
+            <a href="https://plai.mindcet.org/" target="_blank" rel="noopener noreferrer" className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
+              <div className="bg-[#2d3436] p-6 flex items-center justify-center h-32">
+                <span className="text-4xl font-black text-white">PLAI</span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h3 className="text-base font-black text-gray-900">PLAI</h3>
+                <p className="text-[11px] text-gray-600 leading-relaxed">
+                  פלטפורמת MindCET לאוריינות בינה מלאכותית – סביבה אינטראקטיבית למורים ותלמידים עם כלים, משחקים וחוויות למידה מגוונות.
+                </p>
+                <span className="inline-flex items-center gap-1 text-[10px] text-orange-500 font-bold group-hover:underline">
+                  <ExternalLink className="w-3 h-3" /> כניסה לפלטפורמה
+                </span>
+              </div>
+            </a>
+            {/* PIXA */}
+            <a href="https://plai.mindcet.org/new_create_game?step=2" target="_blank" rel="noopener noreferrer" className="group bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1">
+              <div className="bg-[#c8b4f0] p-6 flex items-center justify-center h-32">
+                <span className="text-4xl font-black text-[#6b4d9e]">PIXA</span>
+              </div>
+              <div className="p-5 space-y-2">
+                <h3 className="text-base font-black text-gray-900">PIXA</h3>
+                <p className="text-[11px] text-gray-600 leading-relaxed">
+                  משחק לפיתוח אוריינות בינה מלאכותית המפתח דיוק לשוני, חשיבה ביקורתית ויצירתיות. התלמידים מנסחים פרומפטים כדי לשחזר תמונה.
+                </p>
+                <span className="inline-flex items-center gap-1 text-[10px] text-orange-500 font-bold group-hover:underline">
+                  <ExternalLink className="w-3 h-3" /> התחילו לשחק
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Quests Section */}
+      <section className="relative z-30 bg-white py-10 px-6" dir="rtl">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden">
+            <div className="bg-gradient-to-r from-teal-400 to-blue-500 h-48 flex items-center justify-center">
+              <span className="text-6xl font-black text-white">AI QUESTS</span>
+            </div>
+            <div className="p-6 space-y-4 text-right">
+              <div>
+                <h3 className="text-lg font-black text-gray-900 mb-1">AI Quests – Google Research × Stanford</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  סדרת מערכי שיעור אינטראקטיביים לחקירת AI בכיתה – כולל חומרי הוראה מוכנים בעברית.
+                </p>
+                <a href="https://research.google/ai-quests/intl/he_il/teacher-resources" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-orange-500 font-bold mt-2 hover:underline">
+                  <ExternalLink className="w-3 h-3" /> למשאבי ההוראה
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <footer className="relative z-30 bg-gray-900 text-white py-10 px-6">
         <div className="max-w-2xl mx-auto text-center space-y-4">
           <p className="text-sm text-gray-400 leading-relaxed max-w-md mx-auto">
@@ -384,9 +485,250 @@ export default function Index() {
             </button>
           </div>
 
+          <a
+            href="https://www.mindcet.org/unboxing-school/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-orange-600 transition-all"
+          >
+            <ExternalLink className="w-4 h-4" />
+            למדו עוד על Unboxing School
+          </a>
+
+          <div className="flex items-center justify-center gap-2 pt-2 flex-wrap">
+            <button
+              onClick={() => { setModalTab('topics'); setShowTopicsModal(true); }}
+              className="px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all shadow-md"
+            >
+              עוד נושאים
+            </button>
+            <button
+              onClick={() => { setModalTab('approach'); setShowTopicsModal(true); }}
+              className="px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all shadow-md"
+            >
+              רעיונות יצירתיים ללמד ולהבין
+            </button>
+            <button
+              onClick={() => { setModalTab('done'); setShowTopicsModal(true); }}
+              className="px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition-all shadow-md"
+            >
+              מה כבר נעשה 🌍
+            </button>
+          </div>
+
           <p className="text-xs text-gray-500 pt-4">© {new Date().getFullYear()} MindCET · Unboxing School</p>
         </div>
       </footer>
+
+      {/* Topics & Approaches Modal */}
+      <AnimatePresence>
+        {showTopicsModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="max-w-2xl w-full bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-2xl relative text-right my-8"
+              dir="rtl"
+            >
+              <button
+                onClick={() => setShowTopicsModal(false)}
+                className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all"
+              >
+                <X className="w-4 h-4 text-gray-600" />
+              </button>
+
+              <div className="absolute top-0 right-0 w-full h-2 bg-orange-500 rounded-t-3xl" />
+
+              <div className="flex items-center gap-3 mb-5 mt-2">
+                <div className="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center">
+                  <Lightbulb className="w-5 h-5 text-orange-500" />
+                </div>
+                <h3 className="text-lg font-black text-gray-900">
+                  {modalTab === 'topics' ? 'עוד נושאים' : modalTab === 'approach' ? 'רעיונות יצירתיים ללמד ולהבין' : 'מה כבר נעשה 🌍'}
+                </h3>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {/* Tab 1: More Topics */}
+                {modalTab === 'topics' && (
+                  <motion.div key="topics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
+                    <AnimatePresence mode="wait">
+                      {topicPage === 0 && (
+                        <motion.div key="tp0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">🔍 הבנה ושקיפות</p>
+                          <div className="space-y-2">
+                            {[
+                              { q: 'מה ה-AI רואה כשהוא מסתכל על תמונה?', sub: 'חקירת ראייה ממוחשבת וסיווג תמונות' },
+                              { q: 'איך ה-AI מחליט מה לצנזר ומה לא?', sub: 'מודרציית תוכן ואתיקה של AI' },
+                              { q: 'למה ה-AI לא מבין בדיחות?', sub: 'מגבלות מודלי שפה עם הומור, סרקזם והקשר תרבותי' },
+                              { q: 'למה ה-AI לא יודע לספור אותיות במילה?', sub: 'חשיפת ה\'עיניים המתמטיות\' (טוקנים) של המכונה' },
+                              { q: 'מה ההבדל בין ChatGPT ל\'מוח הגולמי\' שמאחוריו?', sub: 'הבחנה בין עוזר מהונדס למנוע סטטיסטי' },
+                            ].map((t, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
+                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
+                                <div>
+                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
+                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {topicPage === 1 && (
+                        <motion.div key="tp1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">⚖️ אתיקה וחברה</p>
+                          <div className="space-y-2">
+                            {[
+                              { q: 'מי אחראי כש-AI טועה?', sub: 'אחריותיות ואחריות בעולם ה-AI' },
+                              { q: 'האם ה-AI יודע לשמור סוד?', sub: 'פרטיות מידע – מה המודלים זוכרים מהאימון' },
+                              { q: 'למה כל ה-AI-ים מדברים כמו אמריקאים?', sub: 'הטיות שפה ותרבות בנתוני אימון' },
+                              { q: 'האם הפלט של ה-AI הוא מראה של הדעות הקדומות שלנו?', sub: 'ביקורת ובחינת הטיות נסתרות בדאטאסטים גלובליים' },
+                              { q: 'האם ה-AI מכיר את ההיסטוריה של השכונה שלנו?', sub: 'בחינת גבולות ה\'ידע הגלובלי\' מול סיפורים מקומיים' },
+                            ].map((t, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
+                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
+                                <div>
+                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
+                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {topicPage === 2 && (
+                        <motion.div key="tp2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">🧪 חקירה מעשית</p>
+                          <div className="space-y-2">
+                            {[
+                              { q: 'מה קורה כשנותנים ל-AI לשפוט תחרות ציור?', sub: 'AI כמעריך – סובייקטיביות ושיפוט' },
+                              { q: 'האם שני AI-ים יכולים לנהל ויכוח?', sub: 'סימולציית דיון רב-סוכנית' },
+                              { q: 'מה קורה כששמים מילים במשחק אסוציאציות מול ה-AI?', sub: 'מיפוי הפער בין ההיגיון המתמטי לשכל הישר האנושי' },
+                              { q: 'האם ה-AI יודע לספר בדיחה שבאמת מצחיקה בעברית?', sub: 'בחינת מגבלות שפה, תרבות והומור' },
+                            ].map((t, i) => (
+                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
+                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
+                                <div>
+                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
+                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="flex items-center justify-center gap-3 pt-2">
+                      {['הבנה ושקיפות', 'אתיקה וחברה', 'חקירה מעשית'].map((label, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setTopicPage(i)}
+                          className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${
+                            topicPage === i
+                              ? 'bg-orange-500 text-white'
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Tab 2: How to Approach */}
+                {modalTab === 'approach' && (
+                  <motion.div key="approach" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
+                    <p className="text-xs text-gray-600 mb-3">רעיונות לניסויים אינטראקטיביים בגישת Unboxing – לא ללמד על AI, אלא לתת לתלמידים לחקור בעצמם:</p>
+                    {EXPERIMENT_IDEAS.map((idea) => (
+                      <div key={idea.title} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
+                            <idea.icon className="w-4 h-4 text-orange-500" />
+                          </div>
+                          <h4 className="font-black text-gray-900 text-sm">{idea.title}</h4>
+                        </div>
+                        <p className="text-xs text-gray-600 leading-relaxed pr-11">{idea.desc}</p>
+                      </div>
+                    ))}
+                    <div className="p-3 bg-orange-50 rounded-xl border border-orange-200">
+                      <p className="text-[11px] text-gray-600 leading-relaxed">
+                        <span className="font-black text-orange-500">💡</span> בחרו בועה מהמרחב, חשבו על אחת הגישות, ולחצו <span className="text-orange-500 font-black">+</span> כדי לשתף את הרעיון שלכם.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Tab 3: What's Been Done */}
+                {modalTab === 'done' && (
+                  <motion.div key="done" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-2">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-gray-600">ניסויים אינטראקטיביים שכבר קיימים ברשת</p>
+                        <span className="text-[9px] text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">English</span>
+                      </div>
+                      <span className="text-[10px] text-gray-600">{resourcePage + 1}/{Math.ceil(RESOURCES.length / 4)}</span>
+                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={resourcePage}
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{ duration: 0.25 }}
+                        className="space-y-2"
+                      >
+                        {RESOURCES.slice(resourcePage * 4, (resourcePage + 1) * 4).map((r) => (
+                          <a
+                            key={r.title}
+                            href={r.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block bg-gray-50 hover:bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 transition-all group"
+                          >
+                            <div className="flex items-center justify-between gap-2 mb-1">
+                              <span className="text-xs font-bold text-gray-900">{r.title}</span>
+                              <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-orange-500 shrink-0 transition-colors" />
+                            </div>
+                            <p className="text-[10px] text-orange-500 font-bold mb-1">{r.subtitle}</p>
+                            <p className="text-[10px] text-gray-600 leading-relaxed">{r.desc}</p>
+                          </a>
+                        ))}
+                      </motion.div>
+                    </AnimatePresence>
+                    <div className="flex items-center justify-center gap-3 pt-3">
+                      <button
+                        onClick={() => setResourcePage(p => Math.max(0, p - 1))}
+                        disabled={resourcePage === 0}
+                        className="px-3 py-1.5 rounded-full bg-gray-100 text-xs font-bold text-gray-900 disabled:opacity-30 hover:bg-gray-200 transition-all"
+                      >
+                        → הקודם
+                      </button>
+                      <div className="flex gap-1.5">
+                        {Array.from({ length: Math.ceil(RESOURCES.length / 4) }).map((_, i) => (
+                          <button key={i} onClick={() => setResourcePage(i)} className={`w-2 h-2 rounded-full transition-all ${resourcePage === i ? 'bg-orange-500 w-4' : 'bg-gray-300'}`} />
+                        ))}
+                      </div>
+                      <button
+                        onClick={() => setResourcePage(p => Math.min(Math.ceil(RESOURCES.length / 4) - 1, p + 1))}
+                        disabled={resourcePage === Math.ceil(RESOURCES.length / 4) - 1}
+                        className="px-3 py-1.5 rounded-full bg-gray-100 text-xs font-bold text-gray-900 disabled:opacity-30 hover:bg-gray-200 transition-all"
+                      >
+                        הבא ←
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <AddQuestionModal
         isOpen={showAddModal}
