@@ -372,11 +372,12 @@ export default function Admin() {
             <form onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.target);
+              const selectedColors = Array.from(formData.getAll('bubble_colors'));
               saveSettings({
                 mobile_slot_count: parseInt(formData.get('mobile_slot_count')),
                 desktop_slot_count: parseInt(formData.get('desktop_slot_count')),
                 cycle_duration: parseInt(formData.get('cycle_duration')),
-                link_bubble_color: formData.get('link_bubble_color'),
+                bubble_colors: selectedColors.length > 0 ? selectedColors : ['orange', 'red', 'blue', 'green', 'purple'],
                 regular_bubble_color: formData.get('regular_bubble_color'),
               });
             }} className="space-y-4">
@@ -393,15 +394,35 @@ export default function Admin() {
                   <label className="text-sm font-bold text-gray-700 block mb-2">זמן החלפה (ms)</label>
                   <input name="cycle_duration" type="number" min="1000" max="10000" step="100" defaultValue={settings?.cycle_duration || 4000} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
                 </div>
-                <div>
-                  <label className="text-sm font-bold text-gray-700 block mb-2">צבע בועות עם קישור</label>
-                  <select name="link_bubble_color" defaultValue={settings?.link_bubble_color || 'orange'} className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none">
-                    <option value="orange">כתום</option>
-                    <option value="blue">כחול</option>
-                    <option value="green">ירוק</option>
-                    <option value="purple">סגול</option>
-                    <option value="red">אדום</option>
-                  </select>
+                <div className="md:col-span-2">
+                  <label className="text-sm font-bold text-gray-700 block mb-2">צבעי בועות עם קישור (בחרו מספר צבעים)</label>
+                  <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+                    {['orange', 'red', 'blue', 'green', 'purple', 'pink', 'teal', 'yellow', 'indigo'].map(color => {
+                      const isChecked = (settings?.bubble_colors || ['orange', 'red', 'blue', 'green', 'purple']).includes(color);
+                      return (
+                        <label key={color} className="flex items-center gap-2 p-2 border-2 rounded-lg cursor-pointer hover:bg-gray-50">
+                          <input 
+                            type="checkbox" 
+                            name="bubble_colors" 
+                            value={color}
+                            defaultChecked={isChecked}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-xs font-bold">{
+                            color === 'orange' ? 'כתום' :
+                            color === 'red' ? 'אדום' :
+                            color === 'blue' ? 'כחול' :
+                            color === 'green' ? 'ירוק' :
+                            color === 'purple' ? 'סגול' :
+                            color === 'pink' ? 'ורוד' :
+                            color === 'teal' ? 'טורקיז' :
+                            color === 'yellow' ? 'צהוב' :
+                            'אינדיגו'
+                          }</span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 </div>
                 <div>
                   <label className="text-sm font-bold text-gray-700 block mb-2">צבע בועות רגילות</label>

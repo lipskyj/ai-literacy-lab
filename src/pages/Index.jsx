@@ -71,6 +71,8 @@ export default function Index() {
   const [resourcePage, setResourcePage] = useState(0);
   const [dbBubbles, setDbBubbles] = useState([]);
 
+  const [bubbleSettings, setBubbleSettings] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       const tools = await base44.entities.CommunityTool.filter({ status: 'approved' }, '-created_date', 100);
@@ -94,6 +96,11 @@ export default function Index() {
           image: b.image_url || undefined,
         }));
         setDbBubbles(bubbleItems);
+      }
+
+      const settings = await base44.entities.BubbleSettings.list('-created_date', 1);
+      if (settings && settings.length > 0) {
+        setBubbleSettings(settings[0]);
       }
     };
     fetchData();
@@ -177,7 +184,7 @@ export default function Index() {
       <BackgroundOrbs />
 
       <section className="relative min-h-screen flex flex-col items-center px-4 py-8 pt-20 md:pt-32 md:justify-center">
-        <BubbleField items={allQuestions} onSelect={handleSelect} />
+        <BubbleField items={allQuestions} onSelect={handleSelect} settings={bubbleSettings} />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
