@@ -122,9 +122,15 @@ export default function Index() {
       session_id: sessionId,
     });
 
-    // Always show the question modal with choice
     setSelectedQuestion(question);
-    setShowQuestionModal(true);
+    
+    // If bubble has link, show embed modal with information
+    if (question.link) {
+      setShowEmbedModal(true);
+    } else {
+      // For bubbles without link, show A/B choice modal
+      setShowQuestionModal(true);
+    }
   };
 
   const handleAddSubmit = async (data) => {
@@ -276,24 +282,24 @@ export default function Index() {
 
       </section>
 
-      {/* Question Modal - Now uses AddQuestionModal */}
+      {/* Question Modal - A/B Choice for bubbles without links */}
 
-      {/* Embed Modal */}
+      {/* Embed Modal - Shows bubble with link + A/B choice */}
       <AnimatePresence>
         {showEmbedModal && selectedQuestion && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/70 backdrop-blur-md">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/70 backdrop-blur-md overflow-y-auto">
             <motion.div
               initial={{ scale: 0.92, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.92, opacity: 0, y: 30 }}
-              className="w-full max-w-lg bg-white border border-gray-200 rounded-3xl shadow-2xl relative overflow-hidden"
+              className="w-full max-w-lg bg-white border border-gray-200 rounded-3xl shadow-2xl relative overflow-hidden my-8"
               dir="rtl"
             >
               <button
                 onClick={() => setShowEmbedModal(false)}
-                className="absolute top-4 left-4 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-all"
+                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-gray-100 transition-all"
               >
-                <X className="w-4 h-4 text-gray-600" />
+                <X className="w-5 h-5 text-gray-600" />
               </button>
 
               <a
@@ -325,12 +331,40 @@ export default function Index() {
                       <p className="text-[11px] text-gray-600 mt-1">{selectedQuestion.communityMeta.goal}</p>
                     </div>
                   )}
-                  <p className="text-sm text-gray-600 flex items-center gap-2">
+                  <p className="text-sm text-gray-600 flex items-center gap-2 mb-4">
                     <ExternalLink className="w-3.5 h-3.5" />
-                    לחצו לפתיחה
+                    לחצו לפתיחה בטאב חדש
                   </p>
                 </div>
               </a>
+
+              <div className="px-6 pb-6 border-t border-gray-200 pt-6">
+                <p className="text-sm font-bold text-gray-900 mb-4 text-center">רוצים להוסיף משהו לנושא הזה?</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <button
+                    onClick={() => {
+                      setShowEmbedModal(false);
+                      setShowSubmitToolModal(true);
+                    }}
+                    className="p-4 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+                  >
+                    <div className="text-3xl mb-1">🚀</div>
+                    <div className="text-sm font-black text-gray-900">יש לי פתרון מוכן</div>
+                    <div className="text-xs text-gray-600 mt-1">שיתוף כלי שפיתחתי</div>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowEmbedModal(false);
+                      setShowQuestionModal(true);
+                    }}
+                    className="p-4 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all"
+                  >
+                    <div className="text-3xl mb-1">💭</div>
+                    <div className="text-sm font-black text-gray-900">רוצה לפתח פתרון</div>
+                    <div className="text-xs text-gray-600 mt-1">הרשמה למרתון פיתוח</div>
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}

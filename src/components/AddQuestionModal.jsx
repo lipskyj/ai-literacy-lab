@@ -66,13 +66,19 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
-              {submissionType !== 'solution' && submissionType !== 'interest' && (
+              {!submissionType && (
                 <div className="space-y-3">
                   <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בחרו אפשרות</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
                       type="button"
-                      onClick={() => setSubmissionType('solution')}
+                      onClick={() => {
+                        onSubmit({
+                          selectedQuestion,
+                          submissionType: 'solution',
+                        });
+                        resetForm();
+                      }}
                       className="p-5 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all group"
                     >
                       <div className="text-4xl mb-2">🚀</div>
