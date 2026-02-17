@@ -154,6 +154,9 @@ export default function Admin() {
           <button onClick={() => setActiveTab('bubbles')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'bubbles' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
             בועות
           </button>
+          <button onClick={() => setActiveTab('content')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'content' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
+            תוכן דף
+          </button>
           <button onClick={() => setActiveTab('settings')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'settings' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
             הגדרות
           </button>
@@ -370,6 +373,36 @@ export default function Admin() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'content' && (
+          <div className="space-y-6">
+            <div className="bg-white border border-gray-200 rounded-xl p-6">
+              <h2 className="text-lg font-black text-gray-900 mb-4">ניהול תוכן</h2>
+              <p className="text-sm text-gray-600 mb-4">ערכו את כל התוכן של הדף הראשי כאן - טקסטים, תמונות, סרטונים וקישורים</p>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">לוגו URL</label>
+                  <input type="text" defaultValue="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/00627d883_image.png" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none text-sm" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">כותרת ראשית</label>
+                  <input type="text" defaultValue="קהילת Unboxing School" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">תת כותרת</label>
+                  <input type="text" defaultValue="נרתמת לאתגר אוריינות בינה מלאכותית" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
+                </div>
+                <div>
+                  <label className="text-sm font-bold text-gray-700 block mb-2">YouTube Video ID</label>
+                  <input type="text" defaultValue="ETCi-4zRJWE" className="w-full p-3 rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none text-sm" />
+                </div>
+                <button className="px-6 py-3 bg-orange-500 text-white rounded-lg font-bold hover:bg-orange-600">
+                  שמירת שינויים
+                </button>
+              </div>
             </div>
           </div>
         )}

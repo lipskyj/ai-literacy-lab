@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const SubmitToolModal = ({ isOpen, onClose }) => {
+const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
   const [fullName, setFullName] = useState('');
   const [school, setSchool] = useState('');
   const [toolName, setToolName] = useState('');
@@ -45,6 +45,7 @@ const SubmitToolModal = ({ isOpen, onClose }) => {
         link,
         image_url: imageUrl,
         status: 'pending',
+        related_question: selectedQuestion ? selectedQuestion.text : null,
       });
 
       setIsSubmitted(true);
@@ -80,9 +81,9 @@ const SubmitToolModal = ({ isOpen, onClose }) => {
           >
             <button
               onClick={handleClose}
-              className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all"
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all z-10"
             >
-              <X className="w-4 h-4 text-gray-600" />
+              <X className="w-5 h-5 text-gray-600" />
             </button>
 
             <div className="absolute top-0 right-0 w-full h-2 bg-orange-500 rounded-t-3xl" />
@@ -104,6 +105,9 @@ const SubmitToolModal = ({ isOpen, onClose }) => {
               <>
                 <div className="mt-2 mb-6">
                   <h3 className="text-xl font-black text-gray-900 mb-1">שתפו כלי שפיתחתם 🛠️</h3>
+                  {selectedQuestion && (
+                    <p className="text-sm text-orange-600 font-bold mb-2">לנושא: "{selectedQuestion.text}"</p>
+                  )}
                   <p className="text-xs text-gray-600 leading-relaxed">
                     פיתחתם ניסוי, משחק או כלי אינטראקטיבי להוראת AI? שתפו אותו עם הקהילה!
                   </p>

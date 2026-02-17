@@ -713,6 +713,7 @@ export default function Index() {
       <SubmitToolModal
         isOpen={showSubmitToolModal}
         onClose={() => setShowSubmitToolModal(false)}
+        selectedQuestion={selectedQuestion}
       />
     </div>
   );

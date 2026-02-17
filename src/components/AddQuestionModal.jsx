@@ -56,8 +56,8 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
             className="max-w-xl w-full bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-right"
             dir="rtl"
           >
-            <button onClick={handleClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
-              <X className="w-4 h-4" />
+            <button onClick={handleClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 z-10">
+              <X className="w-5 h-5" />
             </button>
             <div className="mb-6">
               <div className="flex items-center gap-3">
