@@ -170,6 +170,7 @@ export default function Admin() {
                     <th className="p-3 text-right font-bold text-gray-600">בית ספר</th>
                     <th className="p-3 text-right font-bold text-gray-600">נושא</th>
                     <th className="p-3 text-right font-bold text-gray-600">רעיון</th>
+                    <th className="p-3 text-right font-bold text-gray-600">סוג</th>
                     <th className="p-3 text-right font-bold text-gray-600">תאריך</th>
                   </tr>
                 </thead>
@@ -181,11 +182,18 @@ export default function Admin() {
                       <td className="p-3 text-gray-900">{p.school}</td>
                       <td className="p-3 text-gray-900 text-xs">{p.topic_text}</td>
                       <td className="p-3 text-gray-900 text-xs max-w-[200px] truncate">{p.idea}</td>
+                      <td className="p-3 text-gray-900 text-xs">
+                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${
+                          p.submission_type === 'interest' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700'
+                        }`}>
+                          {p.submission_type === 'interest' ? 'מעוניין לפתח' : 'נושא חדש'}
+                        </span>
+                      </td>
                       <td className="p-3 text-gray-600 text-xs">{new Date(p.created_date).toLocaleDateString('he-IL')}</td>
                     </tr>
                   ))}
                   {participants.length === 0 && (
-                    <tr><td colSpan={6} className="p-6 text-center text-gray-600">אין נרשמים עדיין</td></tr>
+                    <tr><td colSpan={7} className="p-6 text-center text-gray-600">אין נרשמים עדיין</td></tr>
                   )}
                 </tbody>
               </table>

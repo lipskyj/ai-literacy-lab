@@ -16,7 +16,9 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
     
     if (selectedQuestion) {
       // Submitting for an existing question
-      if (!idea.trim() || !submissionType) return;
+      if (!submissionType) return;
+      if (submissionType === 'interest' && !idea.trim()) return;
+      
       onSubmit({
         selectedQuestion,
         fullName,
@@ -137,7 +139,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                       className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
                     >
                       <div className="text-2xl mb-1">✅</div>
-                      <div className="text-sm font-bold text-gray-900">יש לי פתרון</div>
+                      <div className="text-sm font-bold text-gray-900">יש לי פתרון שכבר פיתחתי</div>
                       <div className="text-xs text-gray-600 mt-1">בניתי כלי/ניסוי</div>
                     </button>
                     <button
@@ -146,7 +148,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                       className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
                     >
                       <div className="text-2xl mb-1">💡</div>
-                      <div className="text-sm font-bold text-gray-900">מעוניין לפתח</div>
+                      <div className="text-sm font-bold text-gray-900">מסקרן אותי לפתח פתרון</div>
                       <div className="text-xs text-gray-600 mt-1">רוצה לעבוד על זה</div>
                     </button>
                   </div>
@@ -154,36 +156,26 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
               )}
 
               {submissionType === 'interest' && (
-                <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6 text-center space-y-3">
-                  <div className="text-4xl">🚀</div>
-                  <h4 className="text-lg font-black text-gray-900">מרתון פיתוח Unboxing School</h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    אנחנו מארגנים מרתון פיתוח קהילתי! נשמח לראות אתכם ולפתח ביחד פתרונות יצירתיים להוראת אוריינות AI.
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    פרטים נוספים יישלחו למייל שלכם בקרוב 📧
-                  </p>
-                </div>
-              )}
-
-              {submissionType !== 'solution' && (
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">
-                    {selectedQuestion 
-                      ? (submissionType === 'interest' ? 'ספרו על הרעיון שלכם (אופציונלי)' : 'הרעיון / הפתרון שלכם')
-                      : 'הרעיון / הפתרון שלכם'}
-                  </label>
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">איך הייתם רוצים לגשת לנושא?</label>
                   <textarea
-                    required={!selectedQuestion || submissionType !== 'interest'}
+                    required
                     value={idea}
                     onChange={(e) => setIdea(e.target.value)}
-                    placeholder={
-                      selectedQuestion
-                        ? submissionType === 'interest'
-                        ? "ספרו מה אתם רוצים לפתח (אופציונלי)..."
-                        : "שתפו אותנו ברעיון..."
-                        : "מה בניתם או מתכננים לבנות?"
-                    }
+                    placeholder="שתפו אותנו איך הייתם רוצים לגשת לנושא ומה מעניין אתכם..."
+                    className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
+                  />
+                </div>
+              )}
+              
+              {!selectedQuestion && (
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">הרעיון / הפתרון שלכם</label>
+                  <textarea
+                    required
+                    value={idea}
+                    onChange={(e) => setIdea(e.target.value)}
+                    placeholder="מה בניתם או מתכננים לבנות?"
                     className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
                   />
                 </div>

@@ -133,13 +133,16 @@ export default function Index() {
 
   const handleAddSubmit = async (data) => {
     if (data.submissionType === 'solution') {
-      // Switch to tool submission modal for solutions
+      // For solution submissions, create a CommunityTool entry with status pending
+      // Store the topic info to pass to the tool modal
+      setSelectedQuestion(data.selectedQuestion);
       setShowAddModal(false);
       setShowQuestionModal(false);
       setShowSubmitToolModal(true);
       return;
     }
 
+    // For interest submissions, save as Participant
     await base44.entities.Participant.create({
       topic_id: data.topicText ? `custom-${Date.now()}` : data.selectedQuestion.id,
       topic_text: data.topicText || data.selectedQuestion.text,
@@ -147,6 +150,7 @@ export default function Index() {
       email: data.email,
       school: data.school,
       idea: data.idea || '',
+      submission_type: data.submissionType,
     });
 
     if (data.topicText) {
@@ -191,7 +195,7 @@ export default function Index() {
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 overflow-x-hidden relative" dir="rtl">
       <BackgroundOrbs />
 
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8">
+      <section className="relative min-h-screen flex items-center justify-center px-4 py-8">
         <BubbleField items={allQuestions} onSelect={handleSelect} settings={bubbleSettings} />
 
         <motion.div
