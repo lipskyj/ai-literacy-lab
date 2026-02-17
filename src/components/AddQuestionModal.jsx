@@ -10,6 +10,15 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
   const [idea, setIdea] = useState('');
   const [submissionType, setSubmissionType] = useState(''); // 'solution' or 'interest'
 
+  const resetForm = () => {
+    setTopicText('');
+    setFullName('');
+    setSchool('');
+    setEmail('');
+    setIdea('');
+    setSubmissionType('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!fullName.trim() || !school.trim() || !email.trim()) return;
@@ -40,12 +49,12 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
       });
     }
     
-    setTopicText('');
-    setFullName('');
-    setSchool('');
-    setEmail('');
-    setIdea('');
-    setSubmissionType('');
+    resetForm();
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
   };
 
   return (
@@ -59,7 +68,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
             className="max-w-xl w-full bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-right"
             dir="rtl"
           >
-            <button onClick={onClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
+            <button onClick={handleClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
               <X className="w-4 h-4" />
             </button>
             {selectedQuestion ? (
@@ -186,7 +195,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                 </button>
                 <button
                   type="button"
-                  onClick={onClose}
+                  onClick={handleClose}
                   className="px-8 py-4 bg-gray-100 text-gray-600 rounded-xl font-bold hover:bg-gray-200 transition-all"
                 >
                   ביטול
