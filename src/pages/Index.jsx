@@ -5,6 +5,7 @@ import BubbleField from '../components/BubbleField';
 import BackgroundOrbs from '../components/BackgroundOrbs';
 import AddQuestionModal from '../components/AddQuestionModal';
 import SubmitToolModal from '../components/SubmitToolModal';
+import BubbleChoiceModal from '../components/BubbleChoiceModal';
 import { base44 } from '@/api/base44Client';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -732,17 +733,16 @@ export default function Index() {
         )}
       </AnimatePresence>
 
-      <AddQuestionModal
+      <BubbleChoiceModal
         isOpen={showQuestionModal}
         onClose={() => setShowQuestionModal(false)}
-        onSubmit={handleAddSubmit}
         selectedQuestion={selectedQuestion}
+        onOpenToolSubmit={() => setShowSubmitToolModal(true)}
       />
 
       <SubmitToolModal
         isOpen={showSubmitToolModal}
         onClose={() => setShowSubmitToolModal(false)}
-        selectedQuestion={selectedQuestion}
       />
     </div>
   );
