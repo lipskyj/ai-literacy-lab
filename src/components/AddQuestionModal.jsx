@@ -59,39 +59,34 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
             <button onClick={handleClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 z-10">
               <X className="w-5 h-5" />
             </button>
-            <div className="mb-6">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
-                  <Plus className="w-5 h-5 text-orange-500" />
-                </div>
-                <h3 className="text-xl md:text-2xl font-black text-gray-900 leading-tight italic">
-                  "{selectedQuestion.text}"
-                </h3>
-              </div>
+            <div className="mb-6 text-center">
+              <h3 className="text-xl md:text-2xl font-black text-gray-900 leading-tight">
+                "{selectedQuestion.text}"
+              </h3>
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               {submissionType !== 'solution' && submissionType !== 'interest' && (
                 <div className="space-y-3">
                   <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בחרו אפשרות</label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
                       type="button"
                       onClick={() => setSubmissionType('solution')}
-                      className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
+                      className="p-5 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all group"
                     >
-                      <div className="text-2xl mb-1">✅</div>
-                      <div className="text-sm font-bold text-gray-900">יש לי פתרון שכבר פיתחתי</div>
-                      <div className="text-xs text-gray-600 mt-1">בניתי כלי/ניסוי</div>
+                      <div className="text-4xl mb-2">🚀</div>
+                      <div className="text-base font-black text-gray-900 mb-1">יש לי פתרון מוכן</div>
+                      <div className="text-xs text-gray-600">בניתי כלי או ניסוי שאפשר לשתף</div>
                     </button>
                     <button
                       type="button"
                       onClick={() => setSubmissionType('interest')}
-                      className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
+                      className="p-5 rounded-2xl border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 transition-all group"
                     >
-                      <div className="text-2xl mb-1">💡</div>
-                      <div className="text-sm font-bold text-gray-900">מסקרן אותי לפתח פתרון</div>
-                      <div className="text-xs text-gray-600 mt-1">רוצה לעבוד על זה</div>
+                      <div className="text-4xl mb-2">💭</div>
+                      <div className="text-base font-black text-gray-900 mb-1">רוצה לפתח פתרון</div>
+                      <div className="text-xs text-gray-600">מעוניין להשתתף במרתון הפיתוח</div>
                     </button>
                   </div>
                 </div>
@@ -143,11 +138,14 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                       className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
                     />
                   </div>
-                  <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-5 text-center space-y-2">
-                    <div className="text-3xl">🚀</div>
-                    <h4 className="text-base font-black text-gray-900">הרשמה למרתון פיתוח</h4>
-                    <p className="text-xs text-gray-700 leading-relaxed">
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-300 rounded-2xl p-6 text-center space-y-3">
+                    <div className="text-5xl">🎯</div>
+                    <h4 className="text-lg font-black text-gray-900">הרשמה למרתון פיתוח Unboxing</h4>
+                    <p className="text-sm text-gray-700 leading-relaxed">
                       נשמח לראות אתכם ולפתח ביחד פתרונות יצירתיים להוראת אוריינות AI
+                    </p>
+                    <p className="text-xs text-orange-700 font-bold">
+                      📧 פרטים נוספים יישלחו למייל
                     </p>
                   </div>
                   <div className="flex gap-4 pt-2">

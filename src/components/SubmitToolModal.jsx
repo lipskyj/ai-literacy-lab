@@ -90,10 +90,8 @@ const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
 
             {isSubmitted ? (
               <div className="text-center py-8 space-y-4">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
-                  <span className="text-3xl">🎉</span>
-                </div>
-                <h3 className="text-xl font-black text-gray-900">תודה על השיתוף!</h3>
+                <div className="text-6xl mb-2">🎉</div>
+                <h3 className="text-2xl font-black text-gray-900">תודה על השיתוף!</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   הכלי שלכם נשלח לבדיקה. לאחר אישור, הוא יופיע כבועה כתומה במרחב הקהילתי שלנו! 🚀
                 </p>
@@ -103,8 +101,9 @@ const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
               </div>
             ) : (
               <>
-                <div className="mt-2 mb-6">
-                  <h3 className="text-xl font-black text-gray-900 mb-1">שתפו כלי שפיתחתם 🛠️</h3>
+                <div className="mt-2 mb-6 text-center">
+                  <div className="text-5xl mb-3">🛠️</div>
+                  <h3 className="text-2xl font-black text-gray-900 mb-2">שתפו כלי שפיתחתם</h3>
                   {selectedQuestion && (
                     <p className="text-sm text-orange-600 font-bold mb-2">לנושא: "{selectedQuestion.text}"</p>
                   )}
