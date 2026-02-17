@@ -122,21 +122,14 @@ export default function Index() {
       session_id: sessionId,
     });
 
-    if (question.link) {
-      setSelectedQuestion(question);
-      setShowEmbedModal(true);
-      return;
-    }
+    // Always show the question modal with choice
     setSelectedQuestion(question);
     setShowQuestionModal(true);
   };
 
   const handleAddSubmit = async (data) => {
     if (data.submissionType === 'solution') {
-      // For solution submissions, create a CommunityTool entry with status pending
-      // Store the topic info to pass to the tool modal
-      setSelectedQuestion(data.selectedQuestion);
-      setShowAddModal(false);
+      // For solution submissions, open the tool submission modal
       setShowQuestionModal(false);
       setShowSubmitToolModal(true);
       return;
@@ -144,21 +137,15 @@ export default function Index() {
 
     // For interest submissions, save as Participant
     await base44.entities.Participant.create({
-      topic_id: data.topicText ? `custom-${Date.now()}` : data.selectedQuestion.id,
-      topic_text: data.topicText || data.selectedQuestion.text,
+      topic_id: data.selectedQuestion ? data.selectedQuestion.id : `custom-${Date.now()}`,
+      topic_text: data.selectedQuestion ? data.selectedQuestion.text : data.topicText,
       full_name: data.fullName,
       email: data.email,
       school: data.school,
       idea: data.idea || '',
-      submission_type: data.submissionType,
+      submission_type: 'interest',
     });
-
-    if (data.topicText) {
-      const newQ = { id: `custom-${Date.now()}`, text: data.topicText };
-      setQuestions(prev => [newQ, ...prev]);
-    }
     
-    setShowAddModal(false);
     setShowQuestionModal(false);
     setIsSubmitted(true);
   };
@@ -717,10 +704,10 @@ export default function Index() {
       </AnimatePresence>
 
       <AddQuestionModal
-        isOpen={showAddModal || showQuestionModal}
-        onClose={() => { setShowAddModal(false); setShowQuestionModal(false); }}
+        isOpen={showQuestionModal}
+        onClose={() => setShowQuestionModal(false)}
         onSubmit={handleAddSubmit}
-        selectedQuestion={showQuestionModal ? selectedQuestion : null}
+        selectedQuestion={selectedQuestion}
       />
 
       <SubmitToolModal
