@@ -127,18 +127,14 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                 </div>
               )}
 
-              {selectedQuestion && (
+              {selectedQuestion && submissionType !== 'solution' && submissionType !== 'interest' && (
                 <div className="space-y-3">
                   <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בחרו את סוג ההגשה</label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setSubmissionType('solution')}
-                      className={`p-4 rounded-xl border-2 transition-all ${
-                        submissionType === 'solution'
-                          ? 'border-orange-500 bg-orange-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                      className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
                     >
                       <div className="text-2xl mb-1">✅</div>
                       <div className="text-sm font-bold text-gray-900">יש לי פתרון</div>
@@ -147,11 +143,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                     <button
                       type="button"
                       onClick={() => setSubmissionType('interest')}
-                      className={`p-4 rounded-xl border-2 transition-all ${
-                        submissionType === 'interest'
-                          ? 'border-orange-500 bg-orange-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                      className="p-4 rounded-xl border-2 border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all"
                     >
                       <div className="text-2xl mb-1">💡</div>
                       <div className="text-sm font-bold text-gray-900">מעוניין לפתח</div>
@@ -161,28 +153,41 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                 </div>
               )}
 
-              <div className="space-y-2">
-                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">
-                  {selectedQuestion 
-                    ? (submissionType === 'solution' ? 'ספרו על הפתרון שבניתם' : submissionType === 'interest' ? 'ספרו על הרעיון שלכם' : 'הרעיון / הפתרון שלכם')
-                    : 'הרעיון / הפתרון שלכם'}
-                </label>
-                <textarea
-                  required
-                  value={idea}
-                  onChange={(e) => setIdea(e.target.value)}
-                  placeholder={
-                    selectedQuestion
-                      ? submissionType === 'solution' 
-                        ? "תארו את הכלי/ניסוי שבניתם ואיך הוא עובד..."
-                        : submissionType === 'interest'
-                        ? "ספרו מה אתם רוצים לפתח ואיך תרצו לגשת לנושא..."
+              {submissionType === 'interest' && (
+                <div className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-6 text-center space-y-3">
+                  <div className="text-4xl">🚀</div>
+                  <h4 className="text-lg font-black text-gray-900">מרתון פיתוח Unboxing School</h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    אנחנו מארגנים מרתון פיתוח קהילתי! נשמח לראות אתכם ולפתח ביחד פתרונות יצירתיים להוראת אוריינות AI.
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    פרטים נוספים יישלחו למייל שלכם בקרוב 📧
+                  </p>
+                </div>
+              )}
+
+              {submissionType !== 'solution' && (
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">
+                    {selectedQuestion 
+                      ? (submissionType === 'interest' ? 'ספרו על הרעיון שלכם (אופציונלי)' : 'הרעיון / הפתרון שלכם')
+                      : 'הרעיון / הפתרון שלכם'}
+                  </label>
+                  <textarea
+                    required={!selectedQuestion || submissionType !== 'interest'}
+                    value={idea}
+                    onChange={(e) => setIdea(e.target.value)}
+                    placeholder={
+                      selectedQuestion
+                        ? submissionType === 'interest'
+                        ? "ספרו מה אתם רוצים לפתח (אופציונלי)..."
                         : "שתפו אותנו ברעיון..."
-                      : "מה בניתם או מתכננים לבנות?"
-                  }
-                  className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
-                />
-              </div>
+                        : "מה בניתם או מתכננים לבנות?"
+                    }
+                    className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
+                  />
+                </div>
+              )}
               <div className="flex gap-4 pt-2">
                 <button type="submit" className="flex-1 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold text-lg hover:from-orange-600 hover:to-orange-700">
                   שליחה 🚀

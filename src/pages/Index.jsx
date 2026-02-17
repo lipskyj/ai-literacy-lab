@@ -132,13 +132,21 @@ export default function Index() {
   };
 
   const handleAddSubmit = async (data) => {
+    if (data.submissionType === 'solution') {
+      // Switch to tool submission modal for solutions
+      setShowAddModal(false);
+      setShowQuestionModal(false);
+      setShowSubmitToolModal(true);
+      return;
+    }
+
     await base44.entities.Participant.create({
       topic_id: data.topicText ? `custom-${Date.now()}` : data.selectedQuestion.id,
       topic_text: data.topicText || data.selectedQuestion.text,
       full_name: data.fullName,
       email: data.email,
       school: data.school,
-      idea: data.idea,
+      idea: data.idea || '',
     });
 
     if (data.topicText) {
@@ -183,7 +191,7 @@ export default function Index() {
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 overflow-x-hidden relative" dir="rtl">
       <BackgroundOrbs />
 
-      <section className="relative min-h-screen flex flex-col items-center px-4 py-8 pt-20 md:pt-32 md:justify-center">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8">
         <BubbleField items={allQuestions} onSelect={handleSelect} settings={bubbleSettings} />
 
         <motion.div
@@ -274,12 +282,7 @@ export default function Index() {
           <Plus className="w-6 h-6" />
         </button>
 
-        <Link
-          to={createPageUrl('Admin')}
-          className="fixed bottom-8 left-8 z-40 px-4 py-2 bg-gray-900 text-white rounded-full shadow-lg text-xs font-bold hover:bg-gray-800"
-        >
-          Admin
-        </Link>
+
       </section>
 
       {/* Question Modal - Now uses AddQuestionModal */}
