@@ -97,6 +97,7 @@ export default function Index() {
           text: b.text,
           link: b.link || undefined,
           image: b.image_url || undefined,
+          color: b.color || undefined,
         }));
         setDbBubbles(bubbleItems);
       }
@@ -459,15 +460,29 @@ export default function Index() {
                 className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </a>
-            <div className="p-6 space-y-4 text-right">
-              <div>
-                <h3 className="text-lg font-black text-gray-900 mb-1">AI Quests – Google Research × Stanford</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  סדרת מערכי שיעור אינטראקטיביים לחקירת AI בכיתה – כולל חומרי הוראה מוכנים בעברית.
-                </p>
-                <a href="https://research.google/ai-quests/intl/he_il/teacher-resources" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-orange-500 font-bold mt-2 hover:underline">
-                  <ExternalLink className="w-3 h-3" /> למשאבי ההוראה
+            <div className="p-6 space-y-3 text-right">
+              <h3 className="text-lg font-black text-gray-900">AI Quests – Google Research × Stanford</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                סדרת מערכי שיעור אינטראקטיביים לחקירת AI בכיתה – כולל חומרי הוראה מוכנים בעברית.
+              </p>
+              <div className="flex gap-3 flex-wrap">
+                <a href="https://research.google/ai-quests/intl/he_il/teacher-resources" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-orange-500 font-bold hover:underline">
+                  <ExternalLink className="w-3 h-3" /> עברית
                 </a>
+                <a href="https://research.google/ai-quests/intl/ar_il/teacher-resources" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-orange-500 font-bold hover:underline">
+                  <ExternalLink className="w-3 h-3" /> ערבית
+                </a>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-xl p-3 space-y-2">
+                <p className="text-[11px] font-bold text-gray-700">שאלונים למורים:</p>
+                <div className="flex gap-3 flex-wrap">
+                  <a href="https://forms.gle/SKd7f64hZ1khnomk7" target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-600 hover:underline">
+                    לפני השיעור ↗
+                  </a>
+                  <a href="https://forms.gle/zEvR6FnyxAAYJAbA7" target="_blank" rel="noopener noreferrer" className="text-[10px] text-blue-600 hover:underline">
+                    אחרי השיעור ↗
+                  </a>
+                </div>
               </div>
             </div>
           </div>

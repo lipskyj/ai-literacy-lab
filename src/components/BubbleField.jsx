@@ -111,9 +111,9 @@ const BubbleField = ({ items, onSelect, settings }) => {
         const state = slotStates[slotIndex];
         if (!state) return null;
 
-        const selectedColor = state.item.link 
+        const selectedColor = state.item.color || (state.item.link 
           ? bubbleColors[slotIndex % bubbleColors.length] 
-          : regularColor;
+          : regularColor);
         const bubbleColor = COLOR_MAP[selectedColor] || COLOR_MAP['orange'];
 
         return (

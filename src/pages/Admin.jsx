@@ -17,6 +17,7 @@ export default function Admin() {
   const [activeTab, setActiveTab] = useState('participants');
   const [editingBubble, setEditingBubble] = useState(null);
   const [showBubbleForm, setShowBubbleForm] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('orange');
   const [siteContent, setSiteContent] = useState([]);
   const [editingContent, setEditingContent] = useState(null);
   const [showContentForm, setShowContentForm] = useState(false);
@@ -54,6 +55,7 @@ export default function Admin() {
     }
     setEditingBubble(null);
     setShowBubbleForm(false);
+    setSelectedColor('orange');
     fetchData();
   };
 
@@ -311,10 +313,11 @@ export default function Admin() {
                     text: formData.get('text'),
                     link: formData.get('link') || null,
                     image_url: imageUrl || null,
+                    color: selectedColor,
                     is_active: formData.get('is_active') === 'on',
                     order: parseInt(formData.get('order')) || 0,
                   });
-                }} className="space-y-3">
+                }} className="space-y-3" onReset={() => { setShowBubbleForm(false); setEditingBubble(null); setSelectedColor('orange'); }}>
                   <div>
                     <label className="text-xs font-bold text-gray-600 block mb-1">טקסט הבועה</label>
                     <input name="text" required defaultValue={editingBubble?.text} className="w-full p-2 text-sm rounded-lg border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
@@ -336,13 +339,37 @@ export default function Admin() {
                       <img src={editingBubble.image_url} className="mt-2 h-20 object-cover rounded" />
                     )}
                   </div>
+                  <div>
+                    <label className="text-xs font-bold text-gray-600 block mb-1">צבע בועה</label>
+                    <div className="grid grid-cols-6 gap-2">
+                      {['orange', 'red', 'blue', 'green', 'purple', 'pink', 'teal', 'yellow', 'indigo', 'white', 'gray'].map(c => (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setSelectedColor(c)}
+                          className={`h-8 rounded border-2 ${selectedColor === c ? 'border-gray-900' : 'border-gray-300'} ${
+                            c === 'orange' ? 'bg-orange-500' :
+                            c === 'red' ? 'bg-red-500' :
+                            c === 'blue' ? 'bg-blue-500' :
+                            c === 'green' ? 'bg-green-500' :
+                            c === 'purple' ? 'bg-purple-500' :
+                            c === 'pink' ? 'bg-pink-500' :
+                            c === 'teal' ? 'bg-teal-500' :
+                            c === 'yellow' ? 'bg-yellow-500' :
+                            c === 'indigo' ? 'bg-indigo-500' :
+                            c === 'white' ? 'bg-white' : 'bg-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                   <div className="flex items-center gap-2">
                     <input name="is_active" type="checkbox" defaultChecked={editingBubble?.is_active !== false} className="w-4 h-4" />
                     <label className="text-xs font-bold text-gray-600">פעיל</label>
                   </div>
                   <div className="flex gap-2">
                     <button type="submit" className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600">שמירה</button>
-                    <button type="button" onClick={() => { setShowBubbleForm(false); setEditingBubble(null); }} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-300">ביטול</button>
+                    <button type="reset" className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-bold hover:bg-gray-300">ביטול</button>
                   </div>
                 </form>
               </div>
@@ -365,7 +392,7 @@ export default function Admin() {
                       <p className="text-xs text-gray-500 mt-2">סדר: {bubble.order} | {bubble.is_active ? 'פעיל' : 'לא פעיל'}</p>
                     </div>
                     <div className="flex gap-1">
-                      <button onClick={() => { setEditingBubble(bubble); setShowBubbleForm(true); }} className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
+                      <button onClick={() => { setEditingBubble(bubble); setSelectedColor(bubble.color || 'orange'); setShowBubbleForm(true); }} className="p-2 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                       </button>
                       <button onClick={() => toggleBubbleActive(bubble.id, bubble.is_active)} className="p-2 bg-yellow-100 text-yellow-600 rounded hover:bg-yellow-200">
