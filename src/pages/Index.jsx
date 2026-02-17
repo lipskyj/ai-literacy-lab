@@ -272,12 +272,7 @@ export default function Index() {
           </div>
         </motion.div>
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="fixed bottom-8 right-8 z-40 w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform"
-        >
-          <Plus className="w-6 h-6" />
-        </button>
+
 
 
       </section>
@@ -287,17 +282,17 @@ export default function Index() {
       {/* Embed Modal - Shows bubble with link + A/B choice */}
       <AnimatePresence>
         {showEmbedModal && selectedQuestion && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/70 backdrop-blur-md overflow-y-auto">
+          <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 md:p-6 bg-black/70 backdrop-blur-md overflow-y-auto">
             <motion.div
               initial={{ scale: 0.92, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.92, opacity: 0, y: 30 }}
-              className="w-full max-w-lg bg-white border border-gray-200 rounded-3xl shadow-2xl relative overflow-hidden my-8"
+              className="w-full max-w-lg bg-white border border-gray-200 rounded-3xl shadow-2xl relative my-8 max-h-[90vh] overflow-y-auto"
               dir="rtl"
             >
               <button
                 onClick={() => setShowEmbedModal(false)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center hover:bg-gray-100 transition-all"
+                className="sticky top-4 left-4 z-20 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-100 transition-all ml-auto mb-4 mr-4"
               >
                 <X className="w-5 h-5 text-gray-600" />
               </button>
