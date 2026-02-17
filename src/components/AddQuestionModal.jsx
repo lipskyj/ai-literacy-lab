@@ -8,7 +8,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
   const [school, setSchool] = useState('');
   const [email, setEmail] = useState('');
   const [idea, setIdea] = useState('');
-  const [hasBuilt, setHasBuilt] = useState(false);
+  const [submissionType, setSubmissionType] = useState(''); // 'solution' or 'interest'
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,13 +16,14 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
     
     if (selectedQuestion) {
       // Submitting for an existing question
-      if (!idea.trim()) return;
+      if (!idea.trim() || !submissionType) return;
       onSubmit({
         selectedQuestion,
         fullName,
         email,
         school,
         idea,
+        submissionType,
       });
     } else {
       // Submitting a new topic
@@ -33,6 +34,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
         email,
         school,
         idea,
+        submissionType: 'new_topic',
       });
     }
     
@@ -41,7 +43,7 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
     setSchool('');
     setEmail('');
     setIdea('');
-    setHasBuilt(false);
+    setSubmissionType('');
   };
 
   return (
@@ -125,15 +127,59 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
                 </div>
               )}
 
+              {selectedQuestion && (
+                <div className="space-y-3">
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">בחרו את סוג ההגשה</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType('solution')}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        submissionType === 'solution'
+                          ? 'border-orange-500 bg-orange-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-2xl mb-1">✅</div>
+                      <div className="text-sm font-bold text-gray-900">יש לי פתרון</div>
+                      <div className="text-xs text-gray-600 mt-1">בניתי כלי/ניסוי</div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSubmissionType('interest')}
+                      className={`p-4 rounded-xl border-2 transition-all ${
+                        submissionType === 'interest'
+                          ? 'border-orange-500 bg-orange-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      <div className="text-2xl mb-1">💡</div>
+                      <div className="text-sm font-bold text-gray-900">מעוניין לפתח</div>
+                      <div className="text-xs text-gray-600 mt-1">רוצה לעבוד על זה</div>
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">
-                  {selectedQuestion ? 'איך הייתם רוצים להנגיש את החשיפה הזו לתלמידים?' : 'הרעיון / הפתרון שלכם'}
+                  {selectedQuestion 
+                    ? (submissionType === 'solution' ? 'ספרו על הפתרון שבניתם' : submissionType === 'interest' ? 'ספרו על הרעיון שלכם' : 'הרעיון / הפתרון שלכם')
+                    : 'הרעיון / הפתרון שלכם'}
                 </label>
                 <textarea
                   required
                   value={idea}
                   onChange={(e) => setIdea(e.target.value)}
-                  placeholder={selectedQuestion ? "שתפו אותנו ברעיון או בכלי שכבר בניתם..." : "מה בניתם או מתכננים לבנות?"}
+                  placeholder={
+                    selectedQuestion
+                      ? submissionType === 'solution' 
+                        ? "תארו את הכלי/ניסוי שבניתם ואיך הוא עובד..."
+                        : submissionType === 'interest'
+                        ? "ספרו מה אתם רוצים לפתח ואיך תרצו לגשת לנושא..."
+                        : "שתפו אותנו ברעיון..."
+                      : "מה בניתם או מתכננים לבנות?"
+                  }
                   className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
                 />
               </div>

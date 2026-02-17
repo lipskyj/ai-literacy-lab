@@ -19,6 +19,10 @@ const COLOR_MAP = {
   green: 'bg-gradient-to-br from-green-400 to-green-600 text-white border-2 border-green-300',
   purple: 'bg-gradient-to-br from-purple-400 to-purple-600 text-white border-2 border-purple-300',
   red: 'bg-gradient-to-br from-red-400 to-red-600 text-white border-2 border-red-300',
+  pink: 'bg-gradient-to-br from-pink-400 to-pink-600 text-white border-2 border-pink-300',
+  teal: 'bg-gradient-to-br from-teal-400 to-teal-600 text-white border-2 border-teal-300',
+  yellow: 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white border-2 border-yellow-300',
+  indigo: 'bg-gradient-to-br from-indigo-400 to-indigo-600 text-white border-2 border-indigo-300',
   white: 'bg-white text-gray-800 border-2 border-gray-200',
   gray: 'bg-gray-100 text-gray-800 border-2 border-gray-300',
 };
@@ -29,7 +33,7 @@ const BubbleField = ({ items, onSelect, settings }) => {
   const mobileSlotCount = settings?.mobile_slot_count || 10;
   const desktopSlotCount = settings?.desktop_slot_count || 13;
   const cycleDuration = settings?.cycle_duration || 4000;
-  const linkColor = settings?.link_bubble_color || 'orange';
+  const bubbleColors = settings?.bubble_colors || ['orange', 'red', 'blue', 'green', 'purple'];
   const regularColor = settings?.regular_bubble_color || 'white';
 
   const slots = isMobile ? MOBILE_SLOTS.slice(0, mobileSlotCount) : DESKTOP_SLOTS.slice(0, desktopSlotCount);
@@ -107,7 +111,10 @@ const BubbleField = ({ items, onSelect, settings }) => {
         const state = slotStates[slotIndex];
         if (!state) return null;
 
-        const bubbleColor = state.item.link ? COLOR_MAP[linkColor] : COLOR_MAP[regularColor];
+        const selectedColor = state.item.link 
+          ? bubbleColors[slotIndex % bubbleColors.length] 
+          : regularColor;
+        const bubbleColor = COLOR_MAP[selectedColor] || COLOR_MAP['orange'];
 
         return (
           <div

@@ -176,13 +176,13 @@ export default function Index() {
     <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-orange-200 overflow-x-hidden relative" dir="rtl">
       <BackgroundOrbs />
 
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-4 py-8">
+      <section className="relative min-h-screen flex flex-col items-center px-4 py-8 pt-20 md:pt-32 md:justify-center">
         <BubbleField items={allQuestions} onSelect={handleSelect} />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative z-30 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl p-4 md:p-8 max-w-[280px] md:max-w-lg text-center pointer-events-auto shadow-lg overflow-hidden min-h-[220px] md:min-h-[280px] flex flex-col justify-between"
+          className="relative z-30 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl p-5 md:p-10 max-w-[300px] md:max-w-2xl text-center pointer-events-auto shadow-lg overflow-hidden min-h-[240px] md:min-h-[320px] flex flex-col justify-between"
         >
           <div className="flex-1 flex items-center justify-center">
             <AnimatePresence mode="wait">
