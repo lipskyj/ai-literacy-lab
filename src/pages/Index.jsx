@@ -71,8 +71,10 @@ export default function Index() {
   const [topicPage, setTopicPage] = useState(0);
   const [resourcePage, setResourcePage] = useState(0);
   const [dbBubbles, setDbBubbles] = useState([]);
-
   const [bubbleSettings, setBubbleSettings] = useState(null);
+  const [siteTopics, setSiteTopics] = useState([]);
+  const [siteResources, setSiteResources] = useState([]);
+  const [siteExperiments, setSiteExperiments] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,6 +104,13 @@ export default function Index() {
       const settings = await base44.entities.BubbleSettings.list('-created_date', 1);
       if (settings && settings.length > 0) {
         setBubbleSettings(settings[0]);
+      }
+
+      const content = await base44.entities.SiteContent.filter({ is_active: true }, 'order', 200);
+      if (content) {
+        setSiteTopics(content.filter(c => c.content_type === 'topic'));
+        setSiteResources(content.filter(c => c.content_type === 'resource'));
+        setSiteExperiments(content.filter(c => c.content_type === 'experiment_idea'));
       }
     };
     fetchData();
@@ -526,12 +535,12 @@ export default function Index() {
       {/* Topics & Approaches Modal */}
       <AnimatePresence>
         {showTopicsModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="max-w-2xl w-full bg-white border border-gray-200 rounded-3xl p-6 md:p-10 shadow-2xl relative text-right my-8"
+              className="max-w-2xl w-full max-h-[85vh] bg-white border border-gray-200 rounded-3xl p-6 md:p-8 shadow-2xl relative text-right overflow-hidden flex flex-col"
               dir="rtl"
             >
               <button
@@ -543,8 +552,8 @@ export default function Index() {
 
               <div className="absolute top-0 right-0 w-full h-2 bg-orange-500 rounded-t-3xl" />
 
-              <div className="flex items-center gap-3 mb-5 mt-2">
-                <div className="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center">
+              <div className="flex items-center gap-3 mb-4 mt-2">
+                <div className="w-10 h-10 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0">
                   <Lightbulb className="w-5 h-5 text-orange-500" />
                 </div>
                 <h3 className="text-lg font-black text-gray-900">
@@ -552,95 +561,39 @@ export default function Index() {
                 </h3>
               </div>
 
-              <AnimatePresence mode="wait">
+              <div className="flex-1 overflow-y-auto">
+                <AnimatePresence mode="wait">
                 {/* Tab 1: More Topics */}
                 {modalTab === 'topics' && (
-                  <motion.div key="topics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
-                    <AnimatePresence mode="wait">
-                      {topicPage === 0 && (
-                        <motion.div key="tp0" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">🔍 הבנה ושקיפות</p>
-                          <div className="space-y-2">
-                            {[
-                              { q: 'מה ה-AI רואה כשהוא מסתכל על תמונה?', sub: 'חקירת ראייה ממוחשבת וסיווג תמונות' },
-                              { q: 'איך ה-AI מחליט מה לצנזר ומה לא?', sub: 'מודרציית תוכן ואתיקה של AI' },
-                              { q: 'למה ה-AI לא מבין בדיחות?', sub: 'מגבלות מודלי שפה עם הומור, סרקזם והקשר תרבותי' },
-                              { q: 'למה ה-AI לא יודע לספור אותיות במילה?', sub: 'חשיפת ה\'עיניים המתמטיות\' (טוקנים) של המכונה' },
-                              { q: 'מה ההבדל בין ChatGPT ל\'מוח הגולמי\' שמאחוריו?', sub: 'הבחנה בין עוזר מהונדס למנוע סטטיסטי' },
-                            ].map((t, i) => (
-                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
-                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
-                                <div>
-                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
-                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
-                                </div>
+                  <motion.div key="topics" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4 max-h-[60vh] overflow-y-auto">
+                    {siteTopics.length > 0 ? (
+                      <>
+                        {['הבנה ושקיפות', 'אתיקה וחברה', 'חקירה מעשית'].map((cat, catIdx) => {
+                          const categoryTopics = siteTopics.filter(t => t.category === cat);
+                          if (categoryTopics.length === 0) return null;
+                          return (
+                            <div key={cat}>
+                              <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">
+                                {catIdx === 0 ? '🔍' : catIdx === 1 ? '⚖️' : '🧪'} {cat}
+                              </p>
+                              <div className="space-y-2">
+                                {categoryTopics.map((t) => (
+                                  <div key={t.id} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
+                                    <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
+                                    <div>
+                                      <span className="text-xs text-gray-900 font-bold block">{t.title}</span>
+                                      <span className="text-[10px] text-gray-600">{t.description}</span>
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {topicPage === 1 && (
-                        <motion.div key="tp1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">⚖️ אתיקה וחברה</p>
-                          <div className="space-y-2">
-                            {[
-                              { q: 'מי אחראי כש-AI טועה?', sub: 'אחריותיות ואחריות בעולם ה-AI' },
-                              { q: 'האם ה-AI יודע לשמור סוד?', sub: 'פרטיות מידע – מה המודלים זוכרים מהאימון' },
-                              { q: 'למה כל ה-AI-ים מדברים כמו אמריקאים?', sub: 'הטיות שפה ותרבות בנתוני אימון' },
-                              { q: 'האם הפלט של ה-AI הוא מראה של הדעות הקדומות שלנו?', sub: 'ביקורת ובחינת הטיות נסתרות בדאטאסטים גלובליים' },
-                              { q: 'האם ה-AI מכיר את ההיסטוריה של השכונה שלנו?', sub: 'בחינת גבולות ה\'ידע הגלובלי\' מול סיפורים מקומיים' },
-                            ].map((t, i) => (
-                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
-                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
-                                <div>
-                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
-                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {topicPage === 2 && (
-                        <motion.div key="tp2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                          <p className="text-[11px] font-black text-orange-500 uppercase tracking-wider mb-2">🧪 חקירה מעשית</p>
-                          <div className="space-y-2">
-                            {[
-                              { q: 'מה קורה כשנותנים ל-AI לשפוט תחרות ציור?', sub: 'AI כמעריך – סובייקטיביות ושיפוט' },
-                              { q: 'האם שני AI-ים יכולים לנהל ויכוח?', sub: 'סימולציית דיון רב-סוכנית' },
-                              { q: 'מה קורה כששמים מילים במשחק אסוציאציות מול ה-AI?', sub: 'מיפוי הפער בין ההיגיון המתמטי לשכל הישר האנושי' },
-                              { q: 'האם ה-AI יודע לספר בדיחה שבאמת מצחיקה בעברית?', sub: 'בחינת מגבלות שפה, תרבות והומור' },
-                            ].map((t, i) => (
-                              <div key={i} className="flex items-start gap-2 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-200">
-                                <Sparkles className="w-3 h-3 text-orange-500 shrink-0 mt-0.5" />
-                                <div>
-                                  <span className="text-xs text-gray-900 font-bold block">{t.q}</span>
-                                  <span className="text-[10px] text-gray-600">{t.sub}</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-
-                    <div className="flex items-center justify-center gap-3 pt-2">
-                      {['הבנה ושקיפות', 'אתיקה וחברה', 'חקירה מעשית'].map((label, i) => (
-                        <button
-                          key={i}
-                          onClick={() => setTopicPage(i)}
-                          className={`text-[10px] font-bold px-3 py-1.5 rounded-full transition-all ${
-                            topicPage === i
-                              ? 'bg-orange-500 text-white'
-                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      ))}
-                    </div>
+                            </div>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-500 text-center py-4">אין נושאים להצגה</p>
+                    )}
                   </motion.div>
                 )}
 
@@ -648,7 +601,20 @@ export default function Index() {
                 {modalTab === 'approach' && (
                   <motion.div key="approach" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-3">
                     <p className="text-xs text-gray-600 mb-3">רעיונות לניסויים אינטראקטיביים בגישת Unboxing – לא ללמד על AI, אלא לתת לתלמידים לחקור בעצמם:</p>
-                    {EXPERIMENT_IDEAS.map((idea) => (
+                    {siteExperiments.length > 0 ? siteExperiments.map((idea) => {
+                      const IconComponent = idea.icon === 'Swords' ? Swords : idea.icon === 'Brain' ? Brain : idea.icon === 'Gauge' ? Gauge : Languages;
+                      return (
+                        <div key={idea.id} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
+                              <IconComponent className="w-4 h-4 text-orange-500" />
+                            </div>
+                            <h4 className="font-black text-gray-900 text-sm">{idea.title}</h4>
+                          </div>
+                          <p className="text-xs text-gray-600 leading-relaxed pr-11">{idea.description}</p>
+                        </div>
+                      );
+                    }) : EXPERIMENT_IDEAS.map((idea) => (
                       <div key={idea.title} className="bg-gray-50 rounded-2xl p-4 border border-gray-200">
                         <div className="flex items-center gap-3 mb-2">
                           <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
@@ -659,11 +625,6 @@ export default function Index() {
                         <p className="text-xs text-gray-600 leading-relaxed pr-11">{idea.desc}</p>
                       </div>
                     ))}
-                    <div className="p-3 bg-orange-50 rounded-xl border border-orange-200">
-                      <p className="text-[11px] text-gray-600 leading-relaxed">
-                        <span className="font-black text-orange-500">💡</span> בחרו בועה מהמרחב, חשבו על אחת הגישות, ולחצו <span className="text-orange-500 font-black">+</span> כדי לשתף את הרעיון שלכם.
-                      </p>
-                    </div>
                   </motion.div>
                 )}
 
@@ -675,7 +636,7 @@ export default function Index() {
                         <p className="text-xs text-gray-600">ניסויים אינטראקטיביים שכבר קיימים ברשת</p>
                         <span className="text-[9px] text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full shrink-0">English</span>
                       </div>
-                      <span className="text-[10px] text-gray-600">{resourcePage + 1}/{Math.ceil(RESOURCES.length / 4)}</span>
+                      <span className="text-[10px] text-gray-600">{resourcePage + 1}/{Math.ceil((siteResources.length > 0 ? siteResources : RESOURCES).length / 4)}</span>
                     </div>
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -686,9 +647,9 @@ export default function Index() {
                         transition={{ duration: 0.25 }}
                         className="space-y-2"
                       >
-                        {RESOURCES.slice(resourcePage * 4, (resourcePage + 1) * 4).map((r) => (
+                        {(siteResources.length > 0 ? siteResources : RESOURCES).slice(resourcePage * 4, (resourcePage + 1) * 4).map((r) => (
                           <a
-                            key={r.title}
+                            key={r.id || r.title}
                             href={r.link}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -699,7 +660,7 @@ export default function Index() {
                               <ExternalLink className="w-3 h-3 text-gray-600 group-hover:text-orange-500 shrink-0 transition-colors" />
                             </div>
                             <p className="text-[10px] text-orange-500 font-bold mb-1">{r.subtitle}</p>
-                            <p className="text-[10px] text-gray-600 leading-relaxed">{r.desc}</p>
+                            <p className="text-[10px] text-gray-600 leading-relaxed">{r.description || r.desc}</p>
                           </a>
                         ))}
                       </motion.div>
@@ -713,13 +674,13 @@ export default function Index() {
                         → הקודם
                       </button>
                       <div className="flex gap-1.5">
-                        {Array.from({ length: Math.ceil(RESOURCES.length / 4) }).map((_, i) => (
+                        {Array.from({ length: Math.ceil((siteResources.length > 0 ? siteResources : RESOURCES).length / 4) }).map((_, i) => (
                           <button key={i} onClick={() => setResourcePage(i)} className={`w-2 h-2 rounded-full transition-all ${resourcePage === i ? 'bg-orange-500 w-4' : 'bg-gray-300'}`} />
                         ))}
                       </div>
                       <button
-                        onClick={() => setResourcePage(p => Math.min(Math.ceil(RESOURCES.length / 4) - 1, p + 1))}
-                        disabled={resourcePage === Math.ceil(RESOURCES.length / 4) - 1}
+                        onClick={() => setResourcePage(p => Math.min(Math.ceil((siteResources.length > 0 ? siteResources : RESOURCES).length / 4) - 1, p + 1))}
+                        disabled={resourcePage === Math.ceil((siteResources.length > 0 ? siteResources : RESOURCES).length / 4) - 1}
                         className="px-3 py-1.5 rounded-full bg-gray-100 text-xs font-bold text-gray-900 disabled:opacity-30 hover:bg-gray-200 transition-all"
                       >
                         הבא ←
@@ -727,7 +688,8 @@ export default function Index() {
                     </div>
                   </motion.div>
                 )}
-              </AnimatePresence>
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
         )}
