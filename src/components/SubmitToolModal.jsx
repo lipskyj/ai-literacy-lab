@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
-const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
+const SubmitToolModal = ({ isOpen, onClose }) => {
   const [fullName, setFullName] = useState('');
   const [school, setSchool] = useState('');
   const [toolName, setToolName] = useState('');
@@ -45,7 +45,6 @@ const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
         link,
         image_url: imageUrl,
         status: 'pending',
-        related_question: selectedQuestion ? selectedQuestion.text : null,
       });
 
       setIsSubmitted(true);
@@ -81,17 +80,19 @@ const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
           >
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all z-10"
+              className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all"
             >
-              <X className="w-5 h-5 text-gray-600" />
+              <X className="w-4 h-4 text-gray-600" />
             </button>
 
             <div className="absolute top-0 right-0 w-full h-2 bg-orange-500 rounded-t-3xl" />
 
             {isSubmitted ? (
               <div className="text-center py-8 space-y-4">
-                <div className="text-6xl mb-2">🎉</div>
-                <h3 className="text-2xl font-black text-gray-900">תודה על השיתוף!</h3>
+                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto">
+                  <span className="text-3xl">🎉</span>
+                </div>
+                <h3 className="text-xl font-black text-gray-900">תודה על השיתוף!</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
                   הכלי שלכם נשלח לבדיקה. לאחר אישור, הוא יופיע כבועה כתומה במרחב הקהילתי שלנו! 🚀
                 </p>
@@ -101,12 +102,8 @@ const SubmitToolModal = ({ isOpen, onClose, selectedQuestion }) => {
               </div>
             ) : (
               <>
-                <div className="mt-2 mb-6 text-center">
-                  <div className="text-5xl mb-3">🛠️</div>
-                  <h3 className="text-2xl font-black text-gray-900 mb-2">שתפו כלי שפיתחתם</h3>
-                  {selectedQuestion && (
-                    <p className="text-sm text-orange-600 font-bold mb-2">לנושא: "{selectedQuestion.text}"</p>
-                  )}
+                <div className="mt-2 mb-6">
+                  <h3 className="text-xl font-black text-gray-900 mb-1">שתפו כלי שפיתחתם 🛠️</h3>
                   <p className="text-xs text-gray-600 leading-relaxed">
                     פיתחתם ניסוי, משחק או כלי אינטראקטיבי להוראת AI? שתפו אותו עם הקהילה!
                   </p>
