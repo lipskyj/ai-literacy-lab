@@ -124,18 +124,24 @@ export default function Index() {
     setShowQuestionModal(true);
   };
 
-  const handleAddSubmit = async (topicText, fullName, school) => {
+  const handleAddSubmit = async (data) => {
     await base44.entities.Participant.create({
-      topic_id: `custom-${Date.now()}`,
-      topic_text: topicText,
-      full_name: fullName,
-      school: school,
-      idea: topicText,
+      topic_id: data.topicText ? `custom-${Date.now()}` : data.selectedQuestion.id,
+      topic_text: data.topicText || data.selectedQuestion.text,
+      full_name: data.fullName,
+      email: data.email,
+      school: data.school,
+      idea: data.idea,
     });
 
-    const newQ = { id: `custom-${Date.now()}`, text: topicText };
-    setQuestions(prev => [newQ, ...prev]);
+    if (data.topicText) {
+      const newQ = { id: `custom-${Date.now()}`, text: data.topicText };
+      setQuestions(prev => [newQ, ...prev]);
+    }
+    
     setShowAddModal(false);
+    setShowQuestionModal(false);
+    setIsSubmitted(true);
   };
 
   const nextCardPage = () => {
@@ -176,7 +182,7 @@ export default function Index() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative z-30 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl p-4 md:p-5 max-w-[280px] md:max-w-xs text-center pointer-events-auto shadow-lg overflow-hidden min-h-[220px] md:min-h-[240px] flex flex-col justify-between"
+          className="relative z-30 bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl p-4 md:p-8 max-w-[280px] md:max-w-lg text-center pointer-events-auto shadow-lg overflow-hidden min-h-[220px] md:min-h-[280px] flex flex-col justify-between"
         >
           <div className="flex-1 flex items-center justify-center">
             <AnimatePresence mode="wait">
@@ -269,77 +275,7 @@ export default function Index() {
         </Link>
       </section>
 
-      {/* Question Modal */}
-      <AnimatePresence>
-        {showQuestionModal && selectedQuestion && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="max-w-2xl w-full bg-white border border-gray-200 rounded-3xl p-6 md:p-10 lg:p-14 shadow-2xl relative text-right"
-            >
-              <button
-                onClick={() => setShowQuestionModal(false)}
-                className="absolute top-4 left-4 md:top-5 md:left-5 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-all"
-              >
-                <X className="w-4 h-4 text-gray-600" />
-              </button>
-
-              <div className="absolute top-0 right-0 w-full h-2 bg-orange-500 rounded-t-3xl" />
-
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6 md:mb-10 items-start mt-2">
-                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0">
-                  <Brain className="w-6 h-6 md:w-8 md:h-8 text-orange-500" />
-                </div>
-                <h3 className="text-lg md:text-2xl font-black text-gray-900 leading-tight italic flex-1">
-                  "{selectedQuestion.text}"
-                </h3>
-              </div>
-
-              <form onSubmit={async (e) => {
-                e.preventDefault();
-                const form = e.target;
-                const fullName = form.elements.namedItem('fullName').value;
-                const school = form.elements.namedItem('school').value;
-                const idea = form.elements.namedItem('idea').value;
-                
-                await base44.entities.Participant.create({
-                  topic_id: selectedQuestion.id,
-                  topic_text: selectedQuestion.text,
-                  full_name: fullName,
-                  school: school,
-                  idea: idea,
-                });
-
-                setShowQuestionModal(false);
-                setIsSubmitted(true);
-              }} className="space-y-5 md:space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                  <div className="space-y-2">
-                    <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">שם מלא</label>
-                    <input name="fullName" required type="text" placeholder="השם שלך..." className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">בית ספר / קהילה</label>
-                    <input name="school" required type="text" placeholder="איפה אתם מלמדים?" className="w-full p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block text-right mr-2">איך הייתם רוצים להנגיש את החשיפה הזו לתלמידים?</label>
-                  <textarea name="idea" required rows={3} placeholder="שתפו אותנו ברעיון שלכם..." className="w-full resize-none p-4 md:p-6 text-base md:text-lg rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none" />
-                </div>
-
-                <button type="submit" className="w-full py-4 md:py-5 bg-gray-900 text-white text-base md:text-lg font-bold rounded-xl flex items-center justify-center gap-3 group hover:bg-gray-800">
-                  יוצאים לדרך
-                  <Send className="w-5 h-5 group-hover:translate-x-[-4px] transition-transform" />
-                </button>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+      {/* Question Modal - Now uses AddQuestionModal */}
 
       {/* Embed Modal */}
       <AnimatePresence>
@@ -398,6 +334,24 @@ export default function Index() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* YouTube Video Section */}
+      <section className="relative z-30 bg-white py-10 px-6" dir="rtl">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-xl font-black text-gray-900 text-center mb-6">הכירו את אתגר Unboxing School</h2>
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                src="https://www.youtube.com/embed/ETCi-4zRJWE"
+                title="Unboxing School Challenge"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute top-0 left-0 w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* MindCET Products Section */}
       <section className="relative z-30 bg-gray-100 py-12 px-6" dir="rtl">
@@ -749,9 +703,10 @@ export default function Index() {
       </AnimatePresence>
 
       <AddQuestionModal
-        isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+        isOpen={showAddModal || showQuestionModal}
+        onClose={() => { setShowAddModal(false); setShowQuestionModal(false); }}
         onSubmit={handleAddSubmit}
+        selectedQuestion={showQuestionModal ? selectedQuestion : null}
       />
 
       <SubmitToolModal

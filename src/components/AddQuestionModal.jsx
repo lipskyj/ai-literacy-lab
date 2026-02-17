@@ -1,21 +1,47 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 
-const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
+const AddQuestionModal = ({ isOpen, onClose, onSubmit, selectedQuestion }) => {
   const [topicText, setTopicText] = useState('');
   const [fullName, setFullName] = useState('');
   const [school, setSchool] = useState('');
   const [email, setEmail] = useState('');
+  const [idea, setIdea] = useState('');
+  const [hasBuilt, setHasBuilt] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!topicText.trim() || !fullName.trim() || !school.trim() || !email.trim()) return;
-    onSubmit(topicText, fullName, school, email);
+    if (!fullName.trim() || !school.trim() || !email.trim()) return;
+    
+    if (selectedQuestion) {
+      // Submitting for an existing question
+      if (!idea.trim()) return;
+      onSubmit({
+        selectedQuestion,
+        fullName,
+        email,
+        school,
+        idea,
+      });
+    } else {
+      // Submitting a new topic
+      if (!topicText.trim() || !idea.trim()) return;
+      onSubmit({
+        topicText,
+        fullName,
+        email,
+        school,
+        idea,
+      });
+    }
+    
     setTopicText('');
     setFullName('');
     setSchool('');
     setEmail('');
+    setIdea('');
+    setHasBuilt(false);
   };
 
   return (
@@ -32,9 +58,23 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
             <button onClick={onClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200">
               <X className="w-4 h-4" />
             </button>
-            <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 italic">
-              שתפו נושא חדש והצטרפו!
-            </h3>
+            {selectedQuestion ? (
+              <div className="mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+                    <Plus className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <h3 className="text-xl md:text-2xl font-black text-gray-900 leading-tight italic">
+                    "{selectedQuestion.text}"
+                  </h3>
+                </div>
+              </div>
+            ) : (
+              <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-6 italic">
+                שתפו נושא חדש והצטרפו!
+              </h3>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -70,14 +110,30 @@ const AddQuestionModal = ({ isOpen, onClose, onSubmit }) => {
                   className="w-full p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
                 />
               </div>
+              
+              {!selectedQuestion && (
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">הנושא שלכם</label>
+                  <textarea
+                    required
+                    autoFocus
+                    value={topicText}
+                    onChange={(e) => setTopicText(e.target.value)}
+                    placeholder="איזה נושא באוריינות AI הייתם רוצים לחקור?"
+                    className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
+                  />
+                </div>
+              )}
+
               <div className="space-y-2">
-                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">הנושא שלכם</label>
+                <label className="text-xs font-black text-gray-500 uppercase tracking-widest block mr-2">
+                  {selectedQuestion ? 'איך הייתם רוצים להנגיש את החשיפה הזו לתלמידים?' : 'הרעיון / הפתרון שלכם'}
+                </label>
                 <textarea
                   required
-                  autoFocus
-                  value={topicText}
-                  onChange={(e) => setTopicText(e.target.value)}
-                  placeholder="איזה נושא באוריינות AI הייתם רוצים לחקור?"
+                  value={idea}
+                  onChange={(e) => setIdea(e.target.value)}
+                  placeholder={selectedQuestion ? "שתפו אותנו ברעיון או בכלי שכבר בניתם..." : "מה בניתם או מתכננים לבנות?"}
                   className="w-full h-32 resize-none p-4 text-base rounded-xl border-2 border-gray-200 focus:border-orange-500 focus:outline-none"
                 />
               </div>
