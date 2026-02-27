@@ -394,6 +394,30 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Event Section */}
+      <section className="relative z-30 bg-white py-10 px-6" dir="rtl">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden">
+            <img
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/cc983264d_WhatsAppImage2026-02-27at114014.jpeg"
+              alt="אירוע Unboxing"
+              className="w-full object-cover"
+            />
+            <div className="p-5 flex flex-col items-center gap-3 text-center">
+              <p className="text-sm font-bold text-gray-900">מפגש בזום · 3/3/2026 - 20:30</p>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSehx3cLyR9RZTmx1ixyIIQXbJFSVvSYgtor3oOchRRB9XMOYQ/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
+              >
+                להרשמה ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* MindCET Products Section */}
       <section className="relative z-30 bg-gray-100 py-12 px-6" dir="rtl">
         <div className="max-w-4xl mx-auto">
