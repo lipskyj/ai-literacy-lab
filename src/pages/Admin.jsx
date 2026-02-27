@@ -549,6 +549,47 @@ export default function Admin() {
           </div>
         )}
 
+        {activeTab === 'share' && (
+          <div className="space-y-6">
+            {/* QR Code for main page */}
+            <div className="bg-white border border-gray-200 rounded-xl p-6 flex flex-col items-center gap-4 text-center">
+              <h2 className="text-base font-black text-gray-900 self-end">QR לדף הראשי</h2>
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.origin)}`}
+                alt="QR Code"
+                className="w-48 h-48 border border-gray-200 rounded-xl"
+              />
+              <p className="text-xs text-gray-500">{window.location.origin}</p>
+            </div>
+
+            {/* Event flyer + registration */}
+            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+              <img
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6992e5f1be2efb5ea8e1a203/cc983264d_WhatsAppImage2026-02-27at114014.jpeg"
+                alt="אירוע Unboxing"
+                className="w-full object-cover"
+              />
+              <div className="p-5 flex flex-col items-center gap-3 text-center" dir="rtl">
+                <p className="text-sm font-bold text-gray-900">מפגש בזום · 3/3/2026 - 20:30</p>
+                <a
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSehx3cLyR9RZTmx1ixyIIQXbJFSVvSYgtor3oOchRRB9XMOYQ/viewform"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-orange-500 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-orange-600 transition-all"
+                >
+                  להרשמה ↗
+                </a>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent('https://docs.google.com/forms/d/e/1FAIpQLSehx3cLyR9RZTmx1ixyIIQXbJFSVvSYgtor3oOchRRB9XMOYQ/viewform')}`}
+                  alt="QR הרשמה"
+                  className="w-36 h-36 border border-gray-200 rounded-xl mt-1"
+                />
+                <p className="text-[10px] text-gray-400">סרקו QR להרשמה ישירה</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'settings' && (
           <div className="bg-white border border-gray-200 rounded-xl p-6">
             <h2 className="text-lg font-black text-gray-900 mb-4">הגדרות תצוגה</h2>
