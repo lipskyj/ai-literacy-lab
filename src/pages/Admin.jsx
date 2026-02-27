@@ -167,6 +167,9 @@ export default function Admin() {
           <button onClick={() => setActiveTab('settings')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'settings' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
             הגדרות
           </button>
+          <button onClick={() => setActiveTab('share')} className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors ${activeTab === 'share' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-600'}`}>
+            שיתוף 📤
+          </button>
         </div>
 
         {activeTab === 'participants' && (
