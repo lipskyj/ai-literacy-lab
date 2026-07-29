@@ -1,0 +1,46 @@
+{
+  "name": "Participant",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Full name of the participant"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email address"
+    },
+    "school": {
+      "type": "string",
+      "description": "School or community name"
+    },
+    "topic_id": {
+      "type": "string",
+      "description": "ID of the topic they selected"
+    },
+    "topic_text": {
+      "type": "string",
+      "description": "Text of the topic"
+    },
+    "idea": {
+      "type": "string",
+      "description": "Their idea for teaching the topic"
+    },
+    "submission_type": {
+      "type": "string",
+      "enum": [
+        "interest",
+        "new_topic"
+      ],
+      "description": "Type of submission - interest or new topic"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "school",
+    "topic_id",
+    "topic_text",
+    "idea"
+  ]
+}

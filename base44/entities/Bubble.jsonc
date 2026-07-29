@@ -1,0 +1,49 @@
+{
+  "name": "Bubble",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Bubble question text"
+    },
+    "link": {
+      "type": "string",
+      "description": "Optional external link"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Optional preview image"
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "orange",
+        "red",
+        "blue",
+        "green",
+        "purple",
+        "pink",
+        "teal",
+        "yellow",
+        "indigo",
+        "white",
+        "gray"
+      ],
+      "default": "orange",
+      "description": "Bubble color"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether bubble is visible"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Sort order"
+    }
+  },
+  "required": [
+    "text"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "TopicClick",
+  "type": "object",
+  "properties": {
+    "topic_id": {
+      "type": "string",
+      "description": "ID of the clicked topic"
+    },
+    "topic_text": {
+      "type": "string",
+      "description": "Text of the topic"
+    },
+    "has_link": {
+      "type": "boolean",
+      "description": "Whether the topic has an external link",
+      "default": false
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Session ID of the user"
+    }
+  },
+  "required": [
+    "topic_id",
+    "topic_text"
+  ]
+}

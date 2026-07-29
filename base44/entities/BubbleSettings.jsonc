@@ -1,0 +1,41 @@
+{
+  "name": "BubbleSettings",
+  "type": "object",
+  "properties": {
+    "mobile_slot_count": {
+      "type": "number",
+      "default": 10,
+      "description": "Number of bubble slots on mobile"
+    },
+    "desktop_slot_count": {
+      "type": "number",
+      "default": 13,
+      "description": "Number of bubble slots on desktop"
+    },
+    "cycle_duration": {
+      "type": "number",
+      "default": 4000,
+      "description": "Milliseconds for bubble cycle"
+    },
+    "bubble_colors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [
+        "orange",
+        "red",
+        "blue",
+        "green",
+        "purple"
+      ],
+      "description": "Available colors for bubbles with links"
+    },
+    "regular_bubble_color": {
+      "type": "string",
+      "default": "white",
+      "description": "Color for regular bubbles"
+    }
+  },
+  "required": []
+}

@@ -1,0 +1,51 @@
+{
+  "name": "CommunityTool",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Name of the tool creator"
+    },
+    "school": {
+      "type": "string",
+      "description": "School or community"
+    },
+    "tool_name": {
+      "type": "string",
+      "description": "Name of the tool"
+    },
+    "goal": {
+      "type": "string",
+      "description": "Purpose of the tool"
+    },
+    "link": {
+      "type": "string",
+      "description": "URL to the tool"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Preview image URL"
+    },
+    "related_question": {
+      "type": "string",
+      "description": "The question this tool relates to"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Approval status"
+    }
+  },
+  "required": [
+    "full_name",
+    "school",
+    "tool_name",
+    "goal",
+    "link"
+  ]
+}
